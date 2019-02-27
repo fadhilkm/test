@@ -603,13 +603,147 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['dataMagang'],
+  props: ['dataMagang', 'dataBiodata', 'dataKonstruktor'],
   data: function data() {
     return {
+      biodata: {
+        tempat_lahir: null,
+        tgl_lahir: new Date().toISOString().substr(0, 10),
+        nohp: null,
+        gender: 'L',
+        alamat: null
+      },
+      pembimbing: {
+        pembimbing_asal: null,
+        konstruktor: null
+      },
       valid: true,
+      valid2: true,
+      valid3: true,
       dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
       dateFormatted2: this.formatDate(new Date().toISOString().substr(0, 10)),
+      dateFormatted3: this.formatDate(new Date().toISOString().substr(0, 10)),
       magang: {
         from: new Date().toISOString().substr(0, 10),
         until: new Date().toISOString().substr(0, 10)
@@ -621,6 +755,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       },
       menu1: false,
       menu2: false,
+      menu3: false,
       items: [{
         title: 'Home',
         icon: 'dashboard'
@@ -634,7 +769,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
   },
   mounted: function mounted() {
     console.log('Component mounted.');
-    console.log(this.dataMagang); //alert(this.dataMagang);
+    console.log(this.dataMagang);
+    console.log(this.dataBiodata);
+    console.log(this.dataKonstruktor);
+
+    if (this.dataBiodata.tgl_lahir) {
+      this.biodata = this.dataBiodata;
+    }
   },
   computed: {
     computedDateFormatted: function computedDateFormatted() {
@@ -649,6 +790,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     'magang.until': function magangUntil(val, oldVal) {
       //alert(val);
       this.dateFormatted2 = this.formatDate(this.magang.until);
+    },
+    'biodata.tgl_lahir': function biodataTgl_lahir(val, oldVal) {
+      //alert(val);
+      this.dateFormatted3 = this.formatDate(this.biodata.tgl_lahir);
     }
   },
   methods: {
@@ -667,6 +812,44 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         }).then(function (result) {
           if (result.value) {
             _this.$refs.form.$el.submit();
+          }
+        });
+      }
+    },
+    submitAddKonstruktor: function submitAddKonstruktor() {
+      var _this2 = this;
+
+      if (this.$refs.form2.validate()) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, submit it!'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.$refs.form2.$el.submit();
+          }
+        });
+      }
+    },
+    submitBiodata: function submitBiodata() {
+      var _this3 = this;
+
+      if (this.$refs.form1.validate()) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, submit it!'
+        }).then(function (result) {
+          if (result.value) {
+            _this3.$refs.form1.$el.submit();
           }
         });
       }
@@ -4794,16 +4977,16 @@ var render = function() {
       _c(
         "v-container",
         [
-          _vm.dataMagang
+          _vm.dataMagang.id
             ? _c(
                 "v-layout",
                 [
-                  _c(
-                    "v-flex",
-                    { attrs: { xs12: "" } },
-                    [
-                      _vm.dataMagang.is_completed
-                        ? _c(
+                  _vm.dataMagang.is_completed
+                    ? _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c(
                             "v-card",
                             {
                               staticClass: "white--text",
@@ -4842,8 +5025,15 @@ var render = function() {
                             ],
                             1
                           )
-                        : _vm.dataMagang.is_validate
-                        ? _c(
+                        ],
+                        1
+                      )
+                    : _vm.dataMagang.is_validate
+                    ? _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c(
                             "v-card",
                             {
                               staticClass: "white--text",
@@ -4881,8 +5071,353 @@ var render = function() {
                               _c("v-card-actions")
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { xs6: "" } },
+                                [
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "headline mb-0" }, [
+                                    _vm._v("Biodata")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-form",
+                                    {
+                                      ref: "form1",
+                                      attrs: {
+                                        "lazy-validation": "",
+                                        method: "POST",
+                                        action: "/biodata"
+                                      },
+                                      model: {
+                                        value: _vm.valid2,
+                                        callback: function($$v) {
+                                          _vm.valid2 = $$v
+                                        },
+                                        expression: "valid2"
+                                      }
+                                    },
+                                    [
+                                      _c("input", {
+                                        attrs: {
+                                          type: "hidden",
+                                          name: "_token"
+                                        },
+                                        domProps: { value: _vm.csrf }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-radio-group",
+                                        {
+                                          attrs: {
+                                            "prepend-icon": "person",
+                                            label: "Jenis kelamin",
+                                            name: "gender"
+                                          },
+                                          model: {
+                                            value: _vm.biodata.gender,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.biodata,
+                                                "gender",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "biodata.gender"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "v-layout",
+                                            [
+                                              _c(
+                                                "v-flex",
+                                                { attrs: { xs6: "" } },
+                                                [
+                                                  _c("v-radio", {
+                                                    key: "L",
+                                                    attrs: {
+                                                      label: "Laki-Laki",
+                                                      value: "L"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-flex",
+                                                { attrs: { xs6: "" } },
+                                                [
+                                                  _c("v-radio", {
+                                                    key: "P",
+                                                    attrs: {
+                                                      label: "Perempuan",
+                                                      value: "P"
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        attrs: {
+                                          type: "hidden",
+                                          name: "tgl_lahir"
+                                        },
+                                        domProps: {
+                                          value: _vm.biodata.tgl_lahir
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          value: _vm.biodata.tempat_lahir,
+                                          name: "tempat_lahir",
+                                          label: "Tempat Lahir",
+                                          "prepend-icon": "place"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-menu",
+                                        {
+                                          ref: "menu3",
+                                          attrs: {
+                                            "close-on-content-click": false,
+                                            "nudge-right": 40,
+                                            lazy: "",
+                                            transition: "scale-transition",
+                                            "offset-y": "",
+                                            "full-width": "",
+                                            "max-width": "290px",
+                                            "min-width": "290px"
+                                          },
+                                          model: {
+                                            value: _vm.menu3,
+                                            callback: function($$v) {
+                                              _vm.menu3 = $$v
+                                            },
+                                            expression: "menu3"
+                                          }
+                                        },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              slot: "activator",
+                                              rules: [_vm.rules.required],
+                                              label: "Tgl Lahir",
+                                              hint: "MM/DD/YYYY format",
+                                              "persistent-hint": "",
+                                              "prepend-icon": "event"
+                                            },
+                                            on: {
+                                              blur: function($event) {
+                                                _vm.biodata.tgl_lahir = _vm.parseDate(
+                                                  _vm.dateFormatted3
+                                                )
+                                              }
+                                            },
+                                            slot: "activator",
+                                            model: {
+                                              value: _vm.dateFormatted3,
+                                              callback: function($$v) {
+                                                _vm.dateFormatted3 = $$v
+                                              },
+                                              expression: "dateFormatted3"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-date-picker", {
+                                            attrs: { "no-title": "" },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.menu3 = false
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.biodata.tgl_lahir,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.biodata,
+                                                  "tgl_lahir",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "biodata.tgl_lahir"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          name: "nohp",
+                                          value: _vm.biodata.nohp,
+                                          label: "No. Hp",
+                                          hint: "No. Hp yang dapat dihubungi",
+                                          "prepend-icon": "smartphone"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-textarea", {
+                                        attrs: {
+                                          name: "alamat",
+                                          hint: "Alamat",
+                                          value: _vm.biodata.alamat,
+                                          "prepend-icon": "pin_drop"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            disabled: !_vm.valid2,
+                                            color: "success"
+                                          },
+                                          on: { click: _vm.submitBiodata }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    Submit\n                  "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { xs5: "", "offset-xs1": "" } },
+                                [
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "headline mb-0" }, [
+                                    _vm._v("Pembimbing")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-form",
+                                    {
+                                      ref: "form2",
+                                      attrs: {
+                                        "lazy-validation": "",
+                                        method: "POST",
+                                        action: "/magang/addkonstruktor"
+                                      },
+                                      model: {
+                                        value: _vm.valid3,
+                                        callback: function($$v) {
+                                          _vm.valid3 = $$v
+                                        },
+                                        expression: "valid3"
+                                      }
+                                    },
+                                    [
+                                      _c("input", {
+                                        attrs: {
+                                          type: "hidden",
+                                          name: "_token"
+                                        },
+                                        domProps: { value: _vm.csrf }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          value: _vm.pembimbing.pembimbing_asal,
+                                          name: "pembimbing_asal",
+                                          label: "Pembimbing Aasal",
+                                          "prepend-icon": "place"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        attrs: {
+                                          type: "hidden",
+                                          name: "user_id"
+                                        },
+                                        domProps: {
+                                          value: _vm.pembimbing.konstruktor
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-select", {
+                                        attrs: {
+                                          rules: [_vm.rules.required],
+                                          items: _vm.dataKonstruktor,
+                                          label: "Pembimbing Lapangan",
+                                          "item-text": "name",
+                                          "item-value": "id",
+                                          "append-icon": "person"
+                                        },
+                                        model: {
+                                          value: _vm.pembimbing.konstruktor,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.pembimbing,
+                                              "konstruktor",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "pembimbing.konstruktor"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            disabled: !_vm.valid3,
+                                            color: "success"
+                                          },
+                                          on: {
+                                            click: _vm.submitAddKonstruktor
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                    Submit\n                  "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
                           )
-                        : _c(
+                        ],
+                        1
+                      )
+                    : _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c(
                             "v-card",
                             {
                               staticClass: "white--text",
@@ -4930,9 +5465,9 @@ var render = function() {
                             ],
                             1
                           )
-                    ],
-                    1
-                  )
+                        ],
+                        1
+                      )
                 ],
                 1
               )

@@ -12,4 +12,10 @@ class Magang extends Model
     public function users(){
     	return $this->belongsTo('App\User','user_id');
     }
+    public function konstruktor(){
+    	return $this->hasOne('App\Konstruktor');
+    }
+    public function pembimbing_asal(){
+    	return $this->hasOne('App\PembimbingAsal');
+    }
 }

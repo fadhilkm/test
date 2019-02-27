@@ -16,9 +16,11 @@ class CreateBiodatasTable extends Migration
         Schema::create('biodatas', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->string('fullname');
-            $table->string('nama_ayah');
-            $table->text('alamat');
+            $table->string('tempat_lahir')->nullable();
+            $table->date('tgl_lahir')->nullable();
+            $table->string('nohp')->nullable();
+            $table->enum('gender', ['L','P'])->nullable();
+            $table->text('alamat')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

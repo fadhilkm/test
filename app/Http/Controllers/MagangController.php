@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Magang;
 use App\Surat;
+use App\Biodata;
+use App\User;
+use App\Konstruktor;
 class MagangController extends Controller
 {
     /**
@@ -15,7 +18,12 @@ class MagangController extends Controller
      */
     public function index()
     {
-        $data['magang'] = Magang::where('user_id',auth()->user()->id)->first();
+        $data['magang'] = Magang::with(['konstruktor','pembimbing_asal'])->where('user_id', auth()->user()->id)->where('is_completed',0)->first();
+        $data['biodata'] = Biodata::where('user_id',auth()->user()->id)->first();
+        $data['konstruktor'] = User::whereHas('roles', function($query){
+            $query->where('name','konstruktor');
+        })->get();
+        
         return view('pages.magang', $data);
     }
 
@@ -123,7 +131,25 @@ class MagangController extends Controller
     {
         //
     }
+    public function addkonstruktor(Request $request){
+        $request->validate([
+            'pembimbing_asal' => 'required',
+            'user_id' => 'required'
+        ]);
+        $user = User::whereHas('roles', function($query){
+            $query->where('name','konstruktor');
+        })->findOrFail($request->input('user_id'));
+
+        $magang = Magang::where('user_id', auth()->user()->id)->where('is_completed',0)->first();
+
+        $konstruktor = Konstruktor::updateOrCreate(['magang_id'=>$magang->id, 'user_id'=>$user->id]);
+        $pembimbing = \App\PembimbingAsal::updateOrCreate(['magang_id'=>$magang->id, 'name'=>$request->input('pembimbing_asal')]);
+
+        return redirect('/magang')->with('success', 'Berhasil edit data pembimbing');
+
+    }
     public function test(){
-        return Magang::with('users','surats.jenis_surat')->get();
+        $asu = Magang::with('konstruktor')->get();
+         return $asu;
     }
 }

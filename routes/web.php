@@ -42,6 +42,10 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 
 
 Route::resource('/magang','MagangController')->middleware(['auth','user']);
+Route::post('/magang/addkonstruktor','MagangController@addkonstruktor')->middleware(['auth','user']);
+Route::resource('/biodata','BiodataController')->middleware(['auth','user']);
+
+
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware(['auth','user']);
 // Route::get('/pengembangan', 'HomeController@pengembangan')->name('pengembangan');

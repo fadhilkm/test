@@ -1,10 +1,10 @@
 <template>
     <v-app>
       <v-container>
-
-        <v-layout v-if="dataMagang">
-           <v-flex xs12>
-            <v-card v-if="dataMagang.is_completed" color="green darken-2" class="white--text">
+        
+        <v-layout v-if="dataMagang.id">
+           <v-flex xs12 v-if="dataMagang.is_completed">
+            <v-card color="green darken-2" class="white--text">
               <v-card-title primary-title>
                 <div>
                   <div class="headline">Magang Sudah Selesai</div>
@@ -17,7 +17,10 @@
               <v-card-actions>
               </v-card-actions>
             </v-card>
-            <v-card v-else-if="dataMagang.is_validate" color="blue darken-2" class="white--text">
+          </v-flex>
+
+          <v-flex xs12 v-else-if="dataMagang.is_validate">
+            <v-card color="blue darken-2" class="white--text">
               <v-card-title primary-title>
                 <div>
                   <div class="headline">Magang Sudah Divalidasi</div>
@@ -31,7 +34,124 @@
              
               </v-card-actions>
             </v-card>
-             <v-card v-else color="blue darken-2" class="white--text">
+            <v-layout>
+              <v-flex xs6>
+                <br>
+                <span class="headline mb-0">Biodata</span>
+
+                <v-form
+                        ref="form1"
+                        v-model="valid2"
+                        lazy-validation 
+                        method="POST"
+                        action="/biodata"
+                      >
+                    <input type="hidden" name="_token" :value="csrf">
+
+                     <v-radio-group v-model="biodata.gender" prepend-icon="person" label="Jenis kelamin" name="gender">
+                        <v-layout>
+                          <v-flex xs6>
+                            <v-radio
+                              key="L"
+                              label="Laki-Laki"
+                              value="L"
+                            ></v-radio>
+                        </v-flex>
+                        <v-flex xs6>
+                             <v-radio
+                              key="P"
+                              label="Perempuan"
+                              value="P"
+                            ></v-radio>
+                        </v-flex>
+                      </v-layout>
+                    </v-radio-group>
+
+                    <input type="hidden" name="tgl_lahir" :value="biodata.tgl_lahir">
+
+                    <v-text-field :rules="[rules.required]" :value="biodata.tempat_lahir" name="tempat_lahir" label="Tempat Lahir" prepend-icon="place"></v-text-field>
+
+                     <v-menu
+                    ref="menu3"
+                    v-model="menu3"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <v-text-field
+                      slot="activator"
+                      :rules="[rules.required]"
+                      v-model="dateFormatted3"
+                      label="Tgl Lahir"
+                      hint="MM/DD/YYYY format"
+                      persistent-hint
+                      prepend-icon="event"
+                      @blur="biodata.tgl_lahir = parseDate(dateFormatted3)"
+                    ></v-text-field>
+                    <v-date-picker v-model="biodata.tgl_lahir" no-title @input="menu3 = false"></v-date-picker>
+                  </v-menu>
+
+                  <v-text-field :rules="[rules.required]" name="nohp" :value="biodata.nohp" label="No. Hp" hint="No. Hp yang dapat dihubungi" prepend-icon="smartphone"></v-text-field>
+
+                   <v-textarea name="alamat" hint="Alamat" :value="biodata.alamat" prepend-icon="pin_drop">
+                   </v-textarea>
+                     <v-btn
+                      :disabled="!valid2"
+                      color="success"
+                      @click="submitBiodata"
+                    >
+                      Submit
+                    </v-btn>
+                      </v-form>
+            </v-flex>
+
+            <v-flex xs5 offset-xs1>
+              <br>
+                <span class="headline mb-0">Pembimbing</span>
+                <v-form
+                        ref="form2"
+                        v-model="valid3"
+                        lazy-validation 
+                        method="POST"
+                        action="/magang/addkonstruktor"
+                      >
+                    <input type="hidden" name="_token" :value="csrf">
+
+                    <v-text-field :rules="[rules.required]" :value="pembimbing.pembimbing_asal" name="pembimbing_asal" label="Pembimbing Aasal" prepend-icon="place"></v-text-field>
+
+                    <input type="hidden" name="user_id" :value="pembimbing.konstruktor">
+                         <v-select
+                         :rules="[rules.required]"
+                         v-model="pembimbing.konstruktor"
+                        :items="dataKonstruktor"
+                        label="Pembimbing Lapangan"
+                        item-text="name"
+                        item-value="id"
+                        append-icon="person"
+                        
+                        ></v-select>
+
+                 
+                     <v-btn
+                      :disabled="!valid3"
+                      color="success"
+                      @click="submitAddKonstruktor"
+                    >
+                      Submit
+                    </v-btn>
+                      </v-form>
+            </v-flex>
+
+            </v-layout>
+          </v-flex>
+
+          <v-flex xs12 v-else>
+             <v-card color="blue darken-2" class="white--text">
               <v-card-title primary-title>
                 <div>
                   <div class="headline">Menunggu Persetujuan Admin</div>
@@ -45,8 +165,8 @@
                    <v-btn >Edit</v-btn><v-btn flat>Hapus</v-btn>
               </v-card-actions>
             </v-card>
-              
             </v-flex>
+
         </v-layout>
         <v-layout v-else>
           <v-flex xs6>
@@ -149,12 +269,26 @@
 
 <script>
     export default {
-        props: ['dataMagang'],
+        props: ['dataMagang','dataBiodata','dataKonstruktor'],
          data () {
           return {
+            biodata:{
+              tempat_lahir:null,
+              tgl_lahir:new Date().toISOString().substr(0, 10),
+              nohp:null,
+              gender:'L',
+              alamat:null
+            },
+            pembimbing:{
+              pembimbing_asal:null,
+              konstruktor:null
+            },
             valid: true,
+            valid2: true,
+            valid3: true,
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             dateFormatted2: this.formatDate(new Date().toISOString().substr(0, 10)),
+            dateFormatted3: this.formatDate(new Date().toISOString().substr(0, 10)),
             magang:{
               from:new Date().toISOString().substr(0, 10),
               until:new Date().toISOString().substr(0, 10)
@@ -164,6 +298,7 @@
             },
             menu1: false,
             menu2: false,
+            menu3: false,
             items: [
               { title: 'Home', icon: 'dashboard' },
               { title: 'About', icon: 'question_answer' }
@@ -175,7 +310,12 @@
         mounted() {
             console.log('Component mounted.');
             console.log(this.dataMagang);
-            //alert(this.dataMagang);
+            console.log(this.dataBiodata);
+            console.log(this.dataKonstruktor);
+
+            if(this.dataBiodata.tgl_lahir){
+              this.biodata = this.dataBiodata;
+            }
 
         }, 
         computed: {
@@ -192,6 +332,10 @@
             //alert(val);
             this.dateFormatted2 = this.formatDate(this.magang.until)
           },
+          'biodata.tgl_lahir':function(val, oldVal) {
+            //alert(val);
+            this.dateFormatted3 = this.formatDate(this.biodata.tgl_lahir)
+          }
         },
          methods: {
           submit:function(){
@@ -207,6 +351,40 @@
                 }).then((result) => {
                   if (result.value) {
                       this.$refs.form.$el.submit();
+                  }
+              });
+             }
+          },
+          submitAddKonstruktor:function(){
+              if(this.$refs.form2.validate()){
+                Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, submit it!'
+                }).then((result) => {
+                  if (result.value) {
+                      this.$refs.form2.$el.submit();
+                  }
+              });
+             }
+          },
+          submitBiodata:function(){
+             if(this.$refs.form1.validate()){
+                   Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, submit it!'
+                }).then((result) => {
+                  if (result.value) {
+                      this.$refs.form1.$el.submit();
                   }
               });
              }

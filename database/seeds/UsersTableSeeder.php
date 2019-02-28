@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use App\Role;
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -18,20 +18,20 @@ class UsersTableSeeder extends Seeder
     	$user->email = 'admin@admin.com';
     	$user->password = bcrypt('password');
         $user->save();
-        $user->roles()->attach(1);
+        $user->roles()->attach(Role::where('name','admin')->first()->id);
 
         $user = new App\User;
     	$user->name = $faker->name;
     	$user->email = 'konstruktor@konstruktor.com';
     	$user->password = bcrypt('password');
         $user->save();
-        $user->roles()->attach(2);
+        $user->roles()->attach(Role::where('name','konstruktor')->first()->id);
 
         $user = new App\User;
     	$user->name = $faker->name;
     	$user->email = 'user@user.com';
     	$user->password = bcrypt('password');
         $user->save();
-        $user->roles()->attach(3);
+        $user->roles()->attach(Role::where('name','user')->first()->id);
     }
 }

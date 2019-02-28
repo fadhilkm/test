@@ -63,7 +63,7 @@ class MagangController extends Controller
             $path = $request->file('proposal')->store('proposal');     
 
             $surat_proposal = new Surat;
-            $surat_proposal->jenis_surat_id = 2;
+            $surat_proposal->jenis_surat_id = \App\JenisSurat::where('name','Surat Proposal')->firstOrFail()->id;
             $surat_proposal->path_upload = $path;
             $surat_proposal->save();
             $surat[] = $surat_proposal->id;
@@ -71,7 +71,7 @@ class MagangController extends Controller
        $path = $request->file('surat_permohonan')->store('surat_permohonan');
         
        $surat_permohonan = new Surat;
-       $surat_permohonan->jenis_surat_id = 1;
+       $surat_permohonan->jenis_surat_id = \App\JenisSurat::where('name','Surat Permohonan Magang')->firstOrFail()->id;
        $surat_permohonan->path_upload = $path;
        $surat_permohonan->save();
        $surat[] = $surat_permohonan->id;

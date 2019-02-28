@@ -1,4 +1,4 @@
-@extends('layouts.concept')
+@extends('layouts.konstruktor.adminbsb')
 
 @section('content')
 

@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Konstruktor;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-class HomeController extends Controller
+use App\Magang;
+use App\Surat;
+use App\Biodata;
+use App\User;
+use App\Konstruktor;
+class MagangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +18,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.konstruktor.home');
+         $data['magang'] = Magang::with('users','surats.jenis_surat')->get();
+        return view('pages.konstruktor.magang', $data);
     }
 
     /**

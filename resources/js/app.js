@@ -28,6 +28,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('magang-component', require('./components/MagangComponent.vue').default);
 Vue.component('pengembangan-component', require('./components/PengembanganComponent.vue').default);
 Vue.component('magang-admin-component', require('./components/MagangAdminComponent.vue').default);
+Vue.component('magang-konstruktor-component', require('./components/MagangKonstruktorComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

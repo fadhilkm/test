@@ -1,4 +1,4 @@
-@extends('layouts.admin.adminbsb')
+@extends('layouts.konstruktor.adminbsb')
 
 @section('content')
 
@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<magang-admin-component :data-magang="{{$magang}}"></magang-admin-component>
+<magang-konstruktor-component></magang-konstruktor-component>
 @endsection
 
 

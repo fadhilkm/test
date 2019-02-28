@@ -773,8 +773,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     console.log(this.dataBiodata);
     console.log(this.dataKonstruktor);
 
-    if (this.dataBiodata.tgl_lahir) {
-      this.biodata = this.dataBiodata;
+    if (this.dataBiodata.tgl_lahir) {//this.biodata = this.dataBiodata;
+    }
+
+    if (this.dataMagang.konstruktor) {
+      this.pembimbing.konstruktor = this.dataMagang.konstruktor.user_id;
+    }
+
+    if (this.dataMagang.pembimbing_asal) {
+      this.pembimbing.pembimbing_asal = this.dataMagang.pembimbing_asal.name;
     }
   },
   computed: {

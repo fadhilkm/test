@@ -136,15 +136,17 @@ class MagangController extends Controller
             'pembimbing_asal' => 'required',
             'user_id' => 'required'
         ]);
+        //dd($request->input());
         $user = User::whereHas('roles', function($query){
             $query->where('name','konstruktor');
         })->findOrFail($request->input('user_id'));
-
+        //dd($user);
         $magang = Magang::where('user_id', auth()->user()->id)->where('is_completed',0)->first();
 
         $konstruktor = Konstruktor::updateOrCreate(['magang_id'=>$magang->id, 'user_id'=>$user->id]);
-        $pembimbing = \App\PembimbingAsal::updateOrCreate(['magang_id'=>$magang->id, 'name'=>$request->input('pembimbing_asal')]);
-
+        $pembimbing = \App\PembimbingAsal::firstOrNew(['magang_id'=>$magang->id]);
+        $pembimbing->name = $request->input('pembimbing_asal');
+        $pembimbing->save();
         return redirect('/magang')->with('success', 'Berhasil edit data pembimbing');
 
     }

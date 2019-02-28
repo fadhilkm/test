@@ -151,7 +151,7 @@ class MagangController extends Controller
 
     }
     public function test(){
-        $asu = Magang::with('konstruktor')->get();
+        $asu = \App\Role::get();
          return $asu;
     }
 }

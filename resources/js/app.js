@@ -6,8 +6,10 @@
  */
 
 //require('./bootstrap');
+
 window.Vue = require('vue');
 window.Swal = require('sweetalert2')
+window.axios = require('axios');
 
 import 'vuetify/dist/vuetify.min.css';
 import Vuetify from 'vuetify';

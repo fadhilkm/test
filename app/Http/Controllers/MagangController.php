@@ -53,7 +53,8 @@ class MagangController extends Controller
        $request->validate([
             'from' =>'required|date',
             'until' => 'required|date',
-            'surat_permohonan' => 'required|mimes:pdf'
+            'surat_permohonan' => 'required|mimes:pdf',
+            'asal' => 'required'
        ]);
        $surat=[];
        if($request->hasFile('proposal')){
@@ -79,6 +80,7 @@ class MagangController extends Controller
         $magang->user_id = auth()->user()->id;
        $magang->from = $request->from;
        $magang->until = $request->until;
+       $magang->asal = $request->input('asal');
        $magang->save();
 
        $magang->surats()->sync($surat);
@@ -143,7 +145,10 @@ class MagangController extends Controller
         //dd($user);
         $magang = Magang::where('user_id', auth()->user()->id)->where('is_completed',0)->first();
 
-        $konstruktor = Konstruktor::updateOrCreate(['magang_id'=>$magang->id, 'user_id'=>$user->id]);
+        $konstruktor = Konstruktor::firstOrNew(['magang_id'=>$magang->id]);
+        $konstruktor->user_id=$user->id;
+        $konstruktor->save();
+
         $pembimbing = \App\PembimbingAsal::firstOrNew(['magang_id'=>$magang->id]);
         $pembimbing->name = $request->input('pembimbing_asal');
         $pembimbing->save();
@@ -151,7 +156,7 @@ class MagangController extends Controller
 
     }
     public function test(){
-        $asu = \App\Role::get();
-         return $asu;
+        $asu = \App\AspekNilai::with('sub_aspek_nilai')->get();
+        return $asu;
     }
 }

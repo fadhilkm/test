@@ -157,6 +157,7 @@
                   <div class="headline">Menunggu Persetujuan Admin</div>
                   <span>Mulai Magang: {{dataMagang.from}}</span><br>
                   <span>Selesai Magang: {{dataMagang.until}}</span><br>
+                  <span>Asal: {{dataMagang.asal}}</span>
                   <!--   <v-btn>Lihat Surat Permohonan</v-btn><br>
                      <v-btn >Lihat Surat Permohonan</v-btn> -->
                 </div>
@@ -232,6 +233,15 @@
           ></v-text-field>
           <v-date-picker v-model="magang.until" no-title @input="menu2 = false"></v-date-picker>
         </v-menu>
+
+         <v-text-field
+            :rules="[rules.required]"
+            label="Asal"
+            name="asal"
+            placeholder="Teknik Informatika, UNNES"
+            hint="Misal: 'Teknik Informatika, UNNES' atau 'RPL, SMK 8 SMG'"
+            prepend-icon="school"
+          ></v-text-field>
 
        <v-text-field
             label="Unggah Surat Permohonan"

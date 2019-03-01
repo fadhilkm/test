@@ -21,6 +21,10 @@ class AspekNilaisSeeder extends Seeder
         	$fck = new SubAspekNilai(['name'=>$njir]);
         	$data->sub_aspek_nilai()->save($fck);
         }
+
+        $data = new AspekNilai;
+        $data->name = "Penilaian Teknis";
+        $data->save();
         $sub_aspek = ['Orientasi Kerja','Orientasi Pengembangan Multimedia  Pembelajaran','Perancangan Konten Multimedia Pembelajaran','Pembuatan Multimedia Pembelajaran'];
         foreach($sub_aspek as $njir){
         	$fck = new SubAspekNilai(['name'=>$njir]);

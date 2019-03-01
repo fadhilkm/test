@@ -18,4 +18,7 @@ class Magang extends Model
     public function pembimbing_asal(){
     	return $this->hasOne('App\PembimbingAsal');
     }
+     public function penilaian(){
+        return $this->hasMany('App\Penilaian');
+    }
 }

@@ -25,6 +25,8 @@
                     ></v-checkbox>
                   </td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.users.name }}</td>
+                  <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.asal }}</td>
+
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.from.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.until.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-if="props.item.status.code==-1">
@@ -88,6 +90,7 @@
                 sortable: false,
                 value: 'name'
               },
+              { text: 'Asal', value: 'asal' },
               { text: 'Mulai Magang', value: 'from' },
               { text: 'Selesai Magang', value: 'until' },
               { text: 'Status Magang', value: 'status' },

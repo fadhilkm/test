@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePembimbingAsalsTable extends Migration
+class CreateNipUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePembimbingAsalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pembimbing_asals', function (Blueprint $table) {
+        Schema::create('nip_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('magang_id');
-            $table->string('name')->nullable();
-            $table->text('description')->nullable();
+            $table->unsignedInteger('user_id');
+            $table->string('nip');
             $table->timestamps();
 
-            $table->foreign('magang_id')->references('id')->on('magangs')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +30,6 @@ class CreatePembimbingAsalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pembimbing_asals');
+        Schema::dropIfExists('nip_users');
     }
 }

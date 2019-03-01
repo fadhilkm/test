@@ -37,6 +37,8 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 		Route::get("/home","HomeController@index");
 		Route::get('/magang', 'MagangController@index');
 		Route::post('/viewpdf', 'SuratController@viewpdf');
+		Route::get('/getnilai/{magang_id}', 'PenilaianController@getnilai');
+		Route::resource('/penilaian', 'PenilaianController');
 
 });
 

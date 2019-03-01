@@ -20,10 +20,25 @@ class UsersTableSeeder extends Seeder
         $user->save();
         $user->roles()->attach(Role::where('name','admin')->first()->id);
 
+
         $user = new App\User;
     	$user->name = $faker->name;
     	$user->email = 'konstruktor@konstruktor.com';
     	$user->password = bcrypt('password');
+        $user->save();
+        $user->roles()->attach(Role::where('name','konstruktor')->first()->id);
+
+        $user = new App\User;
+        $user->name = $faker->name;
+        $user->email = 'konstruktor2@konstruktor2.com';
+        $user->password = bcrypt('password');
+        $user->save();
+        $user->roles()->attach(Role::where('name','konstruktor')->first()->id);
+
+         $user = new App\User;
+        $user->name = $faker->name;
+        $user->email = 'konstruktor3@konstruktor3.com';
+        $user->password = bcrypt('password');
         $user->save();
         $user->roles()->attach(Role::where('name','konstruktor')->first()->id);
 

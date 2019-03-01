@@ -18,7 +18,11 @@ class MagangController extends Controller
      */
     public function index()
     {
-         $data['magang'] = Magang::with('users','surats.jenis_surat')->get();
+         $data['magang'] = Magang::whereHas('konstruktor', function($query){
+            $query->where('user_id',auth()->user()->id);
+         })->with('users','surats.jenis_surat')->get();
+         $data['fieldPenilaian'] = \App\AspekNilai::with('sub_aspek_nilai')->get();
+         //->where('is_validate',1)->orWhere('is_completed',1)->with('users','surats.jenis_surat')->get();
         return view('pages.konstruktor.magang', $data);
     }
 
@@ -87,4 +91,5 @@ class MagangController extends Controller
     {
         //
     }
+    
 }

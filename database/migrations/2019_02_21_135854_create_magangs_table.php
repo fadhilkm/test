@@ -20,6 +20,8 @@ class CreateMagangsTable extends Migration
             $table->date('until')->nullable();
             $table->boolean('is_validate')->default(false);
             $table->boolean('is_completed')->default(false);
+            $table->boolean('nilai_is_validate')->default(false);
+            $table->string('asal')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

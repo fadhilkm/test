@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Konstruktor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class PenilaianController extends Controller
+class SuratController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,21 +35,7 @@ class PenilaianController extends Controller
      */
     public function store(Request $request)
     {
-
-        $magang = $request->input('magang');
-        $aspeks = $request->input('penilaian');
-       
-        $request->validate([
-            'penilaian.*.sub_aspek_nilai.*.nilai'=> 'required|integer|lte:100'
-        ]);
-        foreach($aspeks as $aspek){
-            foreach($aspek['sub_aspek_nilai'] as $sub_aspek_nilai){
-                $penilaian = \App\Penilaian::firstOrNew(['magang_id'=>$magang['id'], 'sub_aspek_nilai_id'=>$sub_aspek_nilai['id']]);
-                $penilaian->nilai = $sub_aspek_nilai['nilai'];
-                $penilaian->save();
-            }
-        }
-        return $this->getNilai($magang['id']);
+        //
     }
 
     /**
@@ -96,14 +82,11 @@ class PenilaianController extends Controller
     {
         //
     }
-    public function getnilai($magang_id){
-        $aspek = \App\AspekNilai::all();
-        foreach($aspek as $aspek_){
-            foreach($aspek_->sub_aspek_nilai as $subaspek_){
-                $penilaian = $subaspek_->penilaian()->where('magang_id',$magang_id)->first();
-                $subaspek_->nilai = $penilaian!=null ? $penilaian->nilai:0;
-            }
-        }
-        return ['magang'=>\App\Magang::with('users')->findOrFail($magang_id), 'penilaian'=>$aspek];
+    public function viewpdf(Request $request){
+        $request->validate([
+            'filename' => 'required'
+        ]);
+        $path = storage_path('app/'.$request->input('filename'));
+        return response()->file($path);
     }
 }

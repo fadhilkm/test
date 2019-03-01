@@ -26,6 +26,7 @@
                   </td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.users.name }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.asal }}</td>
+                  <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.konstruktor.user.name }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.from.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.until.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-if="props.item.status.code==-1">
@@ -69,9 +70,6 @@
                   <td :colspan="headers.length+1">
                     <v-btn color="info"  @click="submitValidasi(true)" :disabled="selected.length> 0 ? false:true">Validasi</v-btn>
                       <v-btn color="error"  @click="submitValidasi(false)" :disabled="selected.length> 0 ? false:true">Belum Validasi</v-btn>
-                    <v-btn color="success" @click="submitCompleted(true)" :disabled="selected.length > 0 ? false:true">Selesai</v-btn>
-                    <v-btn color="error" @click="submitCompleted(false)" :disabled="selected.length > 0 ? false:true">Belum Selesai</v-btn>
-                     <v-btn color="warning" @click="hapus" :disabled="selected.length > 0 ? false:true">Hapus</v-btn>
 
 
                   </td>
@@ -187,6 +185,7 @@
                 value: 'name'
               },
                 { text: 'Asal', value: 'asal' },
+               { text: 'Konstruktor', value: 'konstruktor' },
               { text: 'Mulai Magang', value: 'from' },
               { text: 'Selesai Magang', value: 'until' },
               { text: 'Status Magang', value: 'status' },
@@ -231,7 +230,7 @@
                 Swal.showLoading()
               }
             });
-            axios.get('/konstruktor/getnilai/'+magang.id).then((res)=>{
+            axios.get('/admin/getnilai/'+magang.id).then((res)=>{
                 this.penilaian = res.data.penilaian;
                 this.magang = res.data.magang;
                 this.dialog=true;
@@ -305,7 +304,7 @@
                  confirmButtonText: 'Yakin !',
                  showLoaderOnConfirm: true,
                  preConfirm: () => {
-                    return axios.post("/konstruktor/penilaian", data).then(res => {
+                    return axios.post("/admin/penilaian", data).then(res => {
                        if (res.data.error) {
                           throw new Error(res.data.error)
                        }
@@ -334,7 +333,7 @@
              }
           },
           loadMagang:function(){
-            axios.get('/admin/magang/load').then((res)=>{
+            axios.get('/admin/penilaian/load').then((res)=>{
               this.items = res.data;
               this.addItemsMagangStatus();
             });
@@ -354,7 +353,7 @@
                confirmButtonText: 'Yakin !',
                showLoaderOnConfirm: true,
                preConfirm: () => {
-                  return axios.post("/admin/magang/validasi", data).then(res => {
+                  return axios.post("/admin/penilaian/validasi", data).then(res => {
                      if (res.data.error) {
                         throw new Error(res.data.error)
                      }
@@ -370,44 +369,7 @@
                if (result.value) {
                   Swal.fire(
                      'Good job!',
-                     'Berhasil edit data magang',
-                     'success'
-                  );
-                  this.loadMagang();
-               }
-            });  
-          },
-          submitCompleted:function(completed){
-             console.log(this.selected);
-              //return;
-              let data={'completed':completed,'data':this.selected}
-              Swal.fire({
-               title: 'Are you sure?',
-               text: "You won't be able to revert this!",
-               type: 'warning',
-               showCancelButton: true,
-               confirmButtonColor: '#3085d6',
-               cancelButtonColor: '#d33',
-               confirmButtonText: 'Yakin !',
-               showLoaderOnConfirm: true,
-               preConfirm: () => {
-                  return axios.post("/admin/magang/completed", data).then(res => {
-                     if (res.data.error) {
-                        throw new Error(res.data.error)
-                     }
-
-                  }).catch(error => {
-                     Swal.showValidationMessage(
-                        `Request failed: ${error}`
-                     );
-                  });
-               },
-               allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-               if (result.value) {
-                  Swal.fire(
-                     'Good job!',
-                     'Berhasil edit data magang',
+                     'Berhasil validasi nilai',
                      'success'
                   );
                   this.loadMagang();

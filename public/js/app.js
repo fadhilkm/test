@@ -2747,6 +2747,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['dataMagang', 'dataFieldPenilaian'],
   data: function data() {
@@ -2770,6 +2777,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Status Magang',
         value: 'status'
+      }, {
+        text: 'Status Penilaian',
+        value: 'status_nilai'
       }, {
         text: 'Aksi',
         value: 'status'
@@ -2988,6 +2998,407 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Good job!', 'Berhasil edit data magang', 'success');
 
           _this5.loadMagang();
+        }
+      });
+    },
+    setSubItem: function setSubItem(item_index) {
+      this.magang = this.dataMagang[item_index];
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['dataMagang', 'dataFieldPenilaian'],
+  data: function data() {
+    return {
+      selected: [],
+      expand: false,
+      headers: [{
+        text: 'Nama',
+        align: 'left',
+        sortable: false,
+        value: 'name'
+      }, {
+        text: 'Asal',
+        value: 'asal'
+      }, {
+        text: 'Konstruktor',
+        value: 'konstruktor'
+      }, {
+        text: 'Mulai Magang',
+        value: 'from'
+      }, {
+        text: 'Selesai Magang',
+        value: 'until'
+      }, {
+        text: 'Status Magang',
+        value: 'status'
+      }, {
+        text: 'Status Penilaian',
+        value: 'status_nilai'
+      }, {
+        text: 'Aksi',
+        value: 'status'
+      }],
+      magang: null,
+      items: [],
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      dialog: false,
+      active: null,
+      text: 'asu',
+      penilaian: null
+    };
+  },
+  mounted: function mounted() {
+    console.log('Component mounted.');
+    console.log(this.dataMagang);
+    console.log(this.dataFieldPenilaian);
+    this.items = this.dataMagang;
+    this.addItemsMagangStatus();
+    this.penilaian = this.dataFieldPenilaian; //alert(this.items[0].status.code);
+  },
+  computed: {
+    computedDateFormatted: function computedDateFormatted() {
+      return this.formatDate(this.date);
+    }
+  },
+  watch: {},
+  methods: {
+    getNilaiPesertaMagang: function getNilaiPesertaMagang(magang) {
+      var _this = this;
+
+      console.log(magang);
+      Swal.fire({
+        title: 'Mengambil nilai peserta magang',
+        onBeforeOpen: function onBeforeOpen() {
+          Swal.showLoading();
+        }
+      });
+      axios.get('/admin/getnilai/' + magang.id).then(function (res) {
+        _this.penilaian = res.data.penilaian;
+        _this.magang = res.data.magang;
+        _this.dialog = true;
+        Swal.close();
+      });
+    },
+    hapus: function hapus() {
+      var _this2 = this;
+
+      console.log(this.selected); //return;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yakin !',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.post("/admin/magang/delete", _this2.selected).then(function (res) {
+            if (res.data.error) {
+              throw new Error(res.data.error);
+            }
+          }).catch(function (error) {
+            Swal.showValidationMessage("Request failed: ".concat(error));
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      }).then(function (result) {
+        if (result.value) {
+          Swal.fire('Good job!', 'Berhasil edit data magang', 'success');
+
+          _this2.loadMagang();
+        }
+      });
+    },
+    addItemsMagangStatus: function addItemsMagangStatus() {
+      this.items.forEach(function (v, k) {
+        v.status = {};
+        v.status.code = null;
+        v.status.description = null;
+
+        if (v.is_validate) {
+          v.status.code = 0;
+          v.status.description = "Sudah divalidasi";
+        } else {
+          v.status.code = -1;
+          v.status.description = "Belum divalidasi";
+        }
+
+        if (v.is_completed) {
+          v.status.code = 1;
+          v.status.description = "Magang Sudah Selesai";
+        }
+      });
+    },
+    submitNilai: function submitNilai() {
+      var data = {
+        'magang': this.magang,
+        'penilaian': this.penilaian
+      };
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yakin !',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.post("/admin/penilaian", data).then(function (res) {
+            if (res.data.error) {
+              throw new Error(res.data.error);
+            }
+          }).catch(function (error) {
+            Swal.showValidationMessage('Error, nilai harus diantara 0-100');
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      }).then(function (result) {
+        if (result.value) {
+          Swal.fire('Good job!', 'Berhasil simpan nilai', 'success'); //this.loadMagang();
+        }
+      });
+    },
+    submit: function submit() {
+      if (this.$refs.form.validate()) {
+        this.$refs.form.$el.submit();
+      }
+    },
+    loadMagang: function loadMagang() {
+      var _this3 = this;
+
+      axios.get('/admin/penilaian/load').then(function (res) {
+        _this3.items = res.data;
+
+        _this3.addItemsMagangStatus();
+      });
+    },
+    submitValidasi: function submitValidasi(validate) {
+      var _this4 = this;
+
+      console.log(this.selected); //return;
+
+      var data = {
+        'validate': validate,
+        'data': this.selected
+      };
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yakin !',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.post("/admin/penilaian/validasi", data).then(function (res) {
+            if (res.data.error) {
+              throw new Error(res.data.error);
+            }
+          }).catch(function (error) {
+            Swal.showValidationMessage("Request failed: ".concat(error));
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      }).then(function (result) {
+        if (result.value) {
+          Swal.fire('Good job!', 'Berhasil validasi nilai', 'success');
+
+          _this4.loadMagang();
         }
       });
     },
@@ -8081,6 +8492,44 @@ var render = function() {
                                       ]
                                     ),
                                 _vm._v(" "),
+                                !props.item.nilai_is_validate
+                                  ? _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "red--text" },
+                                          [_vm._v("Belum divalidasi")]
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "green--text" },
+                                          [_vm._v("Sudah divalidasi")]
+                                        )
+                                      ]
+                                    ),
+                                _vm._v(" "),
                                 _c(
                                   "td",
                                   [
@@ -8272,6 +8721,661 @@ var render = function() {
                                 on: { click: _vm.hapus }
                               },
                               [_vm._v("Hapus")]
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    ],
+                    2
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { width: "499" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-card-title",
+                {
+                  staticClass: "headline grey lighten-2",
+                  attrs: { "primary-title": "" }
+                },
+                [_vm._v("\n      Form Penilaian\n    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-layout",
+                    [
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c(
+                            "v-card",
+                            [
+                              _c(
+                                "v-card-text",
+                                { attrs: { "primary-title": "" } },
+                                [
+                                  _c("span", [
+                                    _vm._v(
+                                      "Peserta magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.users.name
+                                            : ""
+                                        )
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Tgl Mulai magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.from.toLocaleString()
+                                            : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Tgl Selesai magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.until.toLocaleString()
+                                            : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Asal: " +
+                                        _vm._s(
+                                          _vm.magang ? _vm.magang.asal : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-tabs",
+                    {
+                      attrs: {
+                        color: "cyan",
+                        dark: "",
+                        "slider-color": "yellow"
+                      },
+                      model: {
+                        value: _vm.active,
+                        callback: function($$v) {
+                          _vm.active = $$v
+                        },
+                        expression: "active"
+                      }
+                    },
+                    [
+                      _vm._l(_vm.penilaian, function(aspek, aspek_i) {
+                        return _c(
+                          "v-tab",
+                          { key: aspek_i, attrs: { ripple: "" } },
+                          [
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(aspek.name) +
+                                "\n\n          "
+                            )
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm._l(_vm.penilaian, function(aspek, aspek_i) {
+                        return _c(
+                          "v-tab-item",
+                          { key: aspek_i },
+                          [
+                            _c(
+                              "v-card",
+                              { attrs: { flat: "" } },
+                              [
+                                _c(
+                                  "v-card-text",
+                                  _vm._l(aspek.sub_aspek_nilai, function(
+                                    subAspek,
+                                    subAspek_i
+                                  ) {
+                                    return _c(
+                                      "div",
+                                      { key: subAspek_i },
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            hint: "0-100",
+                                            label: subAspek.name
+                                          },
+                                          model: {
+                                            value: subAspek.nilai,
+                                            callback: function($$v) {
+                                              _vm.$set(subAspek, "nilai", $$v)
+                                            },
+                                            expression: "subAspek.nilai"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  }),
+                                  0
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "primary" },
+                      on: {
+                        click: function($event) {
+                          return _vm.submitNilai()
+                        }
+                      }
+                    },
+                    [_vm._v("\n       Simpan Nilai\n      ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { flat: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.dialog = false
+                        }
+                      }
+                    },
+                    [_vm._v("\n       Close\n      ")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    [
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-layout",
+            [
+              _c(
+                "v-flex",
+                { attrs: { xs12: "" } },
+                [
+                  _c(
+                    "v-data-table",
+                    {
+                      staticClass: "elevation-1",
+                      attrs: {
+                        headers: _vm.headers,
+                        items: _vm.items,
+                        "item-key": "id",
+                        "select-all": "",
+                        expand: _vm.expand
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "items",
+                          fn: function(props) {
+                            return [
+                              _c("tr", [
+                                _c(
+                                  "td",
+                                  [
+                                    _c("v-checkbox", {
+                                      attrs: {
+                                        primary: "",
+                                        "hide-details": ""
+                                      },
+                                      model: {
+                                        value: props.selected,
+                                        callback: function($$v) {
+                                          _vm.$set(props, "selected", $$v)
+                                        },
+                                        expression: "props.selected"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.setSubItem(props.index)
+                                        props.expanded = !props.expanded
+                                      }
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(props.item.users.name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.setSubItem(props.index)
+                                        props.expanded = !props.expanded
+                                      }
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(props.item.asal))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.setSubItem(props.index)
+                                        props.expanded = !props.expanded
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(props.item.konstruktor.user.name)
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.setSubItem(props.index)
+                                        props.expanded = !props.expanded
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(props.item.from.toLocaleString())
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.setSubItem(props.index)
+                                        props.expanded = !props.expanded
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(props.item.until.toLocaleString())
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                props.item.status.code == -1
+                                  ? _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "red--text" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                props.item.status.description
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  : props.item.status.code == 0
+                                  ? _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "blue--text" },
+                                          [
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  props.item.status.description
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "green--text" },
+                                          [
+                                            _vm._v(
+                                              " " +
+                                                _vm._s(
+                                                  props.item.status.description
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                _vm._v(" "),
+                                !props.item.nilai_is_validate
+                                  ? _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "red--text" },
+                                          [_vm._v("Belum divalidasi")]
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "td",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.setSubItem(props.index)
+                                            props.expanded = !props.expanded
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "green--text" },
+                                          [_vm._v("Sudah divalidasi")]
+                                        )
+                                      ]
+                                    ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "primary",
+                                          dark: "",
+                                          small: ""
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.stopPropagation()
+                                            return _vm.getNilaiPesertaMagang(
+                                              props.item
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Penilaian")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            ]
+                          }
+                        },
+                        {
+                          key: "expand",
+                          fn: function(props) {
+                            return [
+                              _c(
+                                "v-card",
+                                { attrs: { flat: "" } },
+                                [
+                                  _c(
+                                    "v-card-text",
+                                    _vm._l(_vm.magang.surats, function(surat) {
+                                      return _c(
+                                        "v-form",
+                                        {
+                                          key: surat.id,
+                                          attrs: {
+                                            target: "_blank",
+                                            method: "POST",
+                                            action: "/konstruktor/viewpdf"
+                                          }
+                                        },
+                                        [
+                                          _c("input", {
+                                            attrs: {
+                                              type: "hidden",
+                                              name: "_token"
+                                            },
+                                            domProps: { value: _vm.csrf }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("input", {
+                                            attrs: {
+                                              type: "hidden",
+                                              name: "filename"
+                                            },
+                                            domProps: {
+                                              value: surat.path_upload
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                type: "submit",
+                                                color: "info"
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                _vm._s(surat.jenis_surat.name)
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    }),
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ]
+                          }
+                        }
+                      ]),
+                      model: {
+                        value: _vm.selected,
+                        callback: function($$v) {
+                          _vm.selected = $$v
+                        },
+                        expression: "selected"
+                      }
+                    },
+                    [
+                      _vm._v(" "),
+                      _vm._v(" "),
+                      _c("template", { slot: "footer" }, [
+                        _c(
+                          "td",
+                          { attrs: { colspan: _vm.headers.length + 1 } },
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "info",
+                                  disabled:
+                                    _vm.selected.length > 0 ? false : true
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.submitValidasi(true)
+                                  }
+                                }
+                              },
+                              [_vm._v("Validasi")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "error",
+                                  disabled:
+                                    _vm.selected.length > 0 ? false : true
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.submitValidasi(false)
+                                  }
+                                }
+                              },
+                              [_vm._v("Belum Validasi")]
                             )
                           ],
                           1
@@ -46565,6 +47669,7 @@ Vue.component('magang-component', __webpack_require__(/*! ./components/MagangCom
 Vue.component('pengembangan-component', __webpack_require__(/*! ./components/PengembanganComponent.vue */ "./resources/js/components/PengembanganComponent.vue").default);
 Vue.component('magang-admin-component', __webpack_require__(/*! ./components/MagangAdminComponent.vue */ "./resources/js/components/MagangAdminComponent.vue").default);
 Vue.component('magang-konstruktor-component', __webpack_require__(/*! ./components/MagangKonstruktorComponent.vue */ "./resources/js/components/MagangKonstruktorComponent.vue").default);
+Vue.component('penilaian-magang-admin-component', __webpack_require__(/*! ./components/PenilaianMagangAdminComponent.vue */ "./resources/js/components/PenilaianMagangAdminComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -46882,6 +47987,75 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 component.options.__file = "resources/js/components/PengembanganComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PenilaianMagangAdminComponent.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/PenilaianMagangAdminComponent.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea& */ "./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea&");
+/* harmony import */ var _PenilaianMagangAdminComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PenilaianMagangAdminComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PenilaianMagangAdminComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/PenilaianMagangAdminComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PenilaianMagangAdminComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./PenilaianMagangAdminComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PenilaianMagangAdminComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PenilaianMagangAdminComponent.vue?vue&type=template&id=b5c64aea&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PenilaianMagangAdminComponent_vue_vue_type_template_id_b5c64aea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 

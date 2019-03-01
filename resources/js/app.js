@@ -31,7 +31,7 @@ Vue.component('magang-component', require('./components/MagangComponent.vue').de
 Vue.component('pengembangan-component', require('./components/PengembanganComponent.vue').default);
 Vue.component('magang-admin-component', require('./components/MagangAdminComponent.vue').default);
 Vue.component('magang-konstruktor-component', require('./components/MagangKonstruktorComponent.vue').default);
-
+Vue.component('penilaian-magang-admin-component', require('./components/PenilaianMagangAdminComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

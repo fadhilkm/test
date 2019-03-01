@@ -32,6 +32,13 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->prefix('admin')->group
 
 		Route::get('/magang/load', 'MagangController@load');
 		Route::post('/viewpdf', 'SuratController@viewpdf');
+		Route::get('/getnilai/{magang_id}', 'PenilaianController@getnilai');
+
+		Route::get('/penilaian/load', 'PenilaianController@load');
+		Route::resource('/penilaian', 'PenilaianController');
+		
+		Route::post('/penilaian/validasi', 'PenilaianController@validasi');
+
 });
 Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('konstruktor')->group(function(){
 		Route::get("/home","HomeController@index");
@@ -39,6 +46,7 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 		Route::post('/viewpdf', 'SuratController@viewpdf');
 		Route::get('/getnilai/{magang_id}', 'PenilaianController@getnilai');
 		Route::resource('/penilaian', 'PenilaianController');
+
 
 });
 

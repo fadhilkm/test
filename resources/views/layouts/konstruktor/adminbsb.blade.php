@@ -302,13 +302,13 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="{{Request::is('home') ? 'active':''}}">
+                    <li class="{{Request::is('konstruktor/home') ? 'active':''}}">
                         <a href="/home">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
                     </li>
-                    <li class="{{Request::is('magang') ? 'active':''}}">
+                    <li class="{{Request::is('konstruktor/magang') ? 'active':''}}">
                         <a href="{{url('konstruktor/magang')}}">
                             <i class="material-icons">text_fields</i>
                             <span>Magang</span>

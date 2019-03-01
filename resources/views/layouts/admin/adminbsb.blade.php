@@ -302,18 +302,33 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="{{Request::is('home') ? 'active':''}}">
+                    <li class="{{Request::is('admin/home') ? 'active':''}}">
                         <a href="/home">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
                     </li>
-                    <li class="{{Request::is('magang') ? 'active':''}}">
+                   <li class="{{Request::is('admin/magang') || Request::is('admin/penilaian') ? 'active':''}}">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">swap_calls</i>
+                            <span>Magang</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="{{Request::is('admin/magang') ? 'active':''}}">
+                                <a href="{{url('admin/magang')}}">Peserta Magang</a>
+                            </li>
+                            <li class="{{Request::is('admin/penilaian') ? 'active':''}}">
+                                <a href="{{url('admin/penilaian')}}">Penilaian</a>
+                            </li>
+                    
+                        </ul>
+                    </li>
+                    {{-- <li class="{{Request::is('magang') ? 'active':''}}">
                         <a href="{{url('admin/magang')}}">
                             <i class="material-icons">text_fields</i>
                             <span>Magang</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="{{Request::is('pengembangan') ? 'active':''}}">
                         <a href="{{url('pengembangan')}}">
                             <i class="material-icons">layers</i>

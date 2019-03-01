@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Konstruktor;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,7 +14,10 @@ class PenilaianController extends Controller
      */
     public function index()
     {
-        //
+         $data['magang'] = \App\Magang::with(['users','konstruktor.user','surats.jenis_surat'])->get();
+         $data['fieldPenilaian'] = \App\AspekNilai::with('sub_aspek_nilai')->get();
+         //return $data;
+        return view('pages.admin.penilaian',$data);
     }
 
     /**
@@ -38,8 +41,7 @@ class PenilaianController extends Controller
 
         $magang = $request->input('magang');
         $aspeks = $request->input('penilaian');
-        \App\Konstruktor::where('magang_id',$magang['id'])->where('user_id',auth()->user()->id);
-
+       
         $request->validate([
             'penilaian.*.sub_aspek_nilai.*.nilai'=> 'required|integer|lte:100'
         ]);
@@ -96,6 +98,20 @@ class PenilaianController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function validasi(Request $request){
+        $data = $request->input('data');
+        $validate = $request->input('validate');
+        foreach($data as $magang){
+            $magang_ = \App\Magang::findOrFail($magang['id']);
+            $magang_->nilai_is_validate = $validate;
+            $magang_->save();
+        }
+        return ['sukses'=>'success'];
+    }
+    public function load(){
+         return \App\Magang::with(['users','konstruktor.user','surats.jenis_surat'])->get();
+         //return $data;
     }
     public function getnilai($magang_id){
         $aspek = \App\AspekNilai::all();

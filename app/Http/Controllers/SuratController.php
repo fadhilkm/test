@@ -87,7 +87,7 @@ class SuratController extends Controller
         $request->validate([
             'filename' => 'required'
         ]);
-        $path = storage_path('app/'.$request->input('filename'));
+        $path = storage_path('/app/'.$request->input('filename'));
         return response()->file($path);
     }
 }

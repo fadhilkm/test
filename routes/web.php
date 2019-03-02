@@ -74,4 +74,9 @@ Route::get('/logout', function(){
 
 });
 
-Route::get('/test', "Admin\PenilaianController@test");
+Route::get('/test', function(){
+	 $gambar = asset('assets/images/sertifikat.jpg');
+        //return $gambar;
+      $img = \Image::make('https://drive.google.com/uc?export=view&id=12HA9hVJQZHX38EL3zvP1AcfqadYh2TEB');
+      return $img->response('jpg');
+});

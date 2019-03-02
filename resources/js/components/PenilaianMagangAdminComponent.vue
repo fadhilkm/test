@@ -26,7 +26,7 @@
                   </td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.users.name }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.asal }}</td>
-                  <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.konstruktor ? props.item.konstruktor.user.name:'' }}</td>
+                  <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-html="props.item.konstruktor ? props.item.konstruktor.user.name:'<span class=\'red--text\'><i>--belum ada</i></span>'"></td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.from.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.until.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-if="props.item.status.code==-1">
@@ -49,7 +49,7 @@
                     dark
                     @click.stop="getNilaiPesertaMagang(props.item)"
                     small>Penilaian</v-btn> -->
-                   <v-btn-toggle>
+                   <v-btn-toggle mandatory>
                     <v-btn @click.stop="getNilaiPesertaMagang(props.item)">
                       Penilaian
                     </v-btn>

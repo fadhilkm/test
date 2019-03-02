@@ -39,6 +39,7 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->prefix('admin')->group
 		Route::resource('/penilaian', 'PenilaianController');
 		
 		Route::post('/penilaian/validasi', 'PenilaianController@validasi');
+		Route::post('/konstruktor/addtomagang', 'KonstruktorController@addtomagang');
 
 
 });
@@ -54,6 +55,7 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 });
 
 
+Route::get('/penilaian/downloadPdf/{magang_id}', 'PenilaianController@downloadPdf');
 Route::resource('/magang','MagangController')->middleware(['auth','user']);
 Route::post('/magang/addkonstruktor','MagangController@addkonstruktor')->middleware(['auth','user']);
 Route::resource('/biodata','BiodataController')->middleware(['auth','user']);

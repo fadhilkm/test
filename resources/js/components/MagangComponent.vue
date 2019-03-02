@@ -10,13 +10,18 @@
                   <div class="headline">Magang Sudah Selesai</div>
                   <span>Mulai Magang: {{dataMagang.from}}</span><br>
                   <span>Selesai Magang: {{dataMagang.until}}</span><br>
-                  <!--   <v-btn>Lihat Surat Permohonan</v-btn><br>
-                     <v-btn >Lihat Surat Permohonan</v-btn> -->
+                  <span>Asal: {{dataMagang.asal}}</span><br>
+                  <span>Pembimbing Asal: {{dataMagang.pembimbing_asal ? dataMagang.pembimbing_asal.name:'-'}}</span><br>
+
+                  <span>Konstruktor: {{dataMagang.konstruktor ? dataMagang.konstruktor.user.name:'-'}}</span><br>
+                  <v-btn @click="downloadPdfNilai(magang.id)">Lihat Nilai</v-btn>
+                    <!--  <v-btn >Lihat Surat Permohonan</v-btn>  -->
                 </div>
               </v-card-title>
               <v-card-actions>
               </v-card-actions>
             </v-card>
+
           </v-flex>
 
           <v-flex xs12 v-else-if="dataMagang.is_validate">
@@ -26,6 +31,9 @@
                   <div class="headline">Magang Sudah Divalidasi</div>
                   <span>Mulai Magang: {{dataMagang.from}}</span><br>
                   <span>Selesai Magang: {{dataMagang.until}}</span><br>
+                  <span>Asal: {{dataMagang.asal}}</span><br>
+                  <span>Pembimbing Asal: {{dataMagang.pembimbing_asal ? dataMagang.pembimbing_asal.name:'-'}}</span><br>
+                  <span>Konstruktor: {{dataMagang.konstruktor ? dataMagang.konstruktor.user.name:'-'}}</span><br>
                   <!--   <v-btn>Lihat Surat Permohonan</v-btn><br>
                      <v-btn >Lihat Surat Permohonan</v-btn> -->
                 </div>
@@ -124,7 +132,7 @@
 
                     <v-text-field :rules="[rules.required]" :value="pembimbing.pembimbing_asal" name="pembimbing_asal" label="Pembimbing Aasal" prepend-icon="place"></v-text-field>
 
-                    <input type="hidden" name="user_id" :value="pembimbing.konstruktor">
+                   <!--  <input type="hidden" name="user_id" :value="pembimbing.konstruktor">
                          <v-select
                          :rules="[rules.required]"
                          v-model="pembimbing.konstruktor"
@@ -134,13 +142,13 @@
                         item-value="id"
                         append-icon="person"
 
-                        ></v-select>
+                        ></v-select> -->
 
                  
                      <v-btn
                       :disabled="!valid3"
                       color="success"
-                      @click="submitAddKonstruktor"
+                      @click="submitPembimbing"
                     >
                       Submit
                     </v-btn>
@@ -151,7 +159,7 @@
           </v-flex>
 
           <v-flex xs12 v-else>
-             <v-card color="blue darken-2" class="white--text">
+             <v-card color="orange darken-2" class="white--text">
               <v-card-title primary-title>
                 <div>
                   <div class="headline">Menunggu Persetujuan Admin</div>
@@ -322,7 +330,7 @@
             console.log(this.dataMagang);
             console.log(this.dataBiodata);
             console.log(this.dataKonstruktor);
-
+            this.magang.id = this.dataMagang.id;
             if(this.dataBiodata.tgl_lahir){
               //this.biodata = this.dataBiodata;
             }
@@ -371,7 +379,7 @@
               });
              }
           },
-          submitAddKonstruktor:function(){
+          submitPembimbing:function(){
               if(this.$refs.form2.validate()){
                 Swal.fire({
                   title: 'Are you sure?',
@@ -387,6 +395,9 @@
                   }
               });
              }
+          },
+          downloadPdfNilai:function(magang_id){
+              window.open("/penilaian/downloadPdf/"+magang_id, "_blank");
           },
           submitBiodata:function(){
              if(this.$refs.form1.validate()){

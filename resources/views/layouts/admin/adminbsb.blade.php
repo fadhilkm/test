@@ -323,6 +323,12 @@
                     
                         </ul>
                     </li>
+                    <li class="{{Request::is('admin/konstruktor') ? 'active':''}}">
+                        <a href="/home">
+                            <i class="material-icons">person</i>
+                            <span>Konstruktor</span>
+                        </a>
+                    </li>
                     {{-- <li class="{{Request::is('magang') ? 'active':''}}">
                         <a href="{{url('admin/magang')}}">
                             <i class="material-icons">text_fields</i>

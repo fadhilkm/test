@@ -20,7 +20,7 @@ class MagangController extends Controller
      */
     public function index()
     {
-        $data['magang'] = Magang::with(['konstruktor','pembimbing_asal'])->where('user_id', auth()->user()->id)->first();
+        $data['magang'] = Magang::with(['konstruktor.user','pembimbing_asal'])->where('user_id', auth()->user()->id)->first();
         $data['biodata'] = Biodata::where('user_id',auth()->user()->id)->first();
         $data['konstruktor'] = User::whereHas('roles', function($query){
             $query->where('name','konstruktor');
@@ -138,18 +138,18 @@ class MagangController extends Controller
     public function addkonstruktor(Request $request){
         $request->validate([
             'pembimbing_asal' => 'required',
-            'user_id' => 'required'
+            // 'user_id' => 'required'
         ]);
         //dd($request->input());
-        $user = User::whereHas('roles', function($query){
-            $query->where('name','konstruktor');
-        })->findOrFail($request->input('user_id'));
+        // $user = User::whereHas('roles', function($query){
+        //     $query->where('name','konstruktor');
+        // })->findOrFail($request->input('user_id'));
         //dd($user);
-        $magang = Magang::where('user_id', auth()->user()->id)->where('is_completed',0)->first();
+        $magang = Magang::where('user_id', auth()->user()->id)->where('is_completed',0)->first(); //hanya bisa mengedit pembimbing jika magang belum selesai
 
-        $konstruktor = Konstruktor::firstOrNew(['magang_id'=>$magang->id]);
-        $konstruktor->user_id=$user->id;
-        $konstruktor->save();
+        // $konstruktor = Konstruktor::firstOrNew(['magang_id'=>$magang->id]);
+        // $konstruktor->user_id=$user->id;
+        // $konstruktor->save();
 
         $pembimbing = \App\PembimbingAsal::firstOrNew(['magang_id'=>$magang->id]);
         $pembimbing->name = $request->input('pembimbing_asal');

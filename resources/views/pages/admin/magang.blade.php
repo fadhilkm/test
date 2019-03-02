@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<magang-admin-component :data-magang="{{$magang}}"></magang-admin-component>
+<magang-admin-component :data-konstruktor="{{$konstruktor}}" :data-magang="{{$magang}}"></magang-admin-component>
 @endsection
 
 

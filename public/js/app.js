@@ -1885,8 +1885,77 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['dataMagang'],
+  props: ['dataMagang', 'dataKonstruktor'],
   data: function data() {
     return {
       selected: [],
@@ -1900,6 +1969,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         text: 'Asal',
         value: 'asal'
       }, {
+        text: 'Konstruktor',
+        value: 'konstruktor'
+      }, {
         text: 'Mulai Magang',
         value: 'from'
       }, {
@@ -1908,10 +1980,19 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       }, {
         text: 'Status Magang',
         value: 'status'
+      }, {
+        text: 'Aksi',
+        value: 'aksi'
+      }],
+      rules: [function (v) {
+        return !!v || 'Required';
       }],
       magang: null,
       items: [],
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      dialog: false,
+      konstruktor: null,
+      valid: true
     };
   },
   mounted: function mounted() {
@@ -2042,8 +2123,57 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         }
       });
     },
-    submitCompleted: function submitCompleted(completed) {
+    editKonstruktor: function editKonstruktor(magang) {
+      this.magang = magang;
+      this.dialog = true;
+      this.konstruktor = magang.konstruktor ? magang.konstruktor.user : null; //console.log(magang.konstruktor.user);
+    },
+    submitKonstruktor: function submitKonstruktor() {
       var _this4 = this;
+
+      console.log(this.konstruktor);
+
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+
+      var data = {
+        'magang': this.magang,
+        'user': this.konstruktor
+      };
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yakin !',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.post("/admin/konstruktor/addtomagang", data).then(function (res) {
+            if (res.data.error) {
+              throw new Error(res.data.error);
+            }
+          }).catch(function (error) {
+            Swal.showValidationMessage("Request failed: ".concat(error));
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
+      }).then(function (result) {
+        if (result.value) {
+          Swal.fire('Good job!', 'Berhasil edit konstruktor', 'success');
+
+          _this4.loadMagang();
+
+          _this4.dialog = false;
+        }
+      });
+    },
+    submitCompleted: function submitCompleted(completed) {
+      var _this5 = this;
 
       console.log(this.selected); //return;
 
@@ -2076,7 +2206,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         if (result.value) {
           Swal.fire('Good job!', 'Berhasil edit data magang', 'success');
 
-          _this4.loadMagang();
+          _this5.loadMagang();
         }
       });
     },
@@ -2406,6 +2536,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['dataMagang', 'dataBiodata', 'dataKonstruktor'],
   data: function data() {
@@ -2455,6 +2593,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     console.log(this.dataMagang);
     console.log(this.dataBiodata);
     console.log(this.dataKonstruktor);
+    this.magang.id = this.dataMagang.id;
 
     if (this.dataBiodata.tgl_lahir) {//this.biodata = this.dataBiodata;
     }
@@ -2506,7 +2645,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         });
       }
     },
-    submitAddKonstruktor: function submitAddKonstruktor() {
+    submitPembimbing: function submitPembimbing() {
       var _this2 = this;
 
       if (this.$refs.form2.validate()) {
@@ -2524,6 +2663,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           }
         });
       }
+    },
+    downloadPdfNilai: function downloadPdfNilai(magang_id) {
+      window.open("/penilaian/downloadPdf/" + magang_id, "_blank");
     },
     submitBiodata: function submitBiodata() {
       var _this3 = this;
@@ -7253,6 +7395,22 @@ var render = function() {
                                   [_vm._v(_vm._s(props.item.asal))]
                                 ),
                                 _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    innerHTML: _vm._s(
+                                      props.item.konstruktor
+                                        ? props.item.konstruktor.user.name
+                                        : "<span class='red--text'><i>--belum ada</i></span>"
+                                    )
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
                                 _c(
                                   "td",
                                   {
@@ -7362,7 +7520,27 @@ var render = function() {
                                           ]
                                         )
                                       ]
+                                    ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editKonstruktor(
+                                              props.item
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit Konstruktor")]
                                     )
+                                  ],
+                                  1
+                                )
                               ])
                             ]
                           }
@@ -7545,6 +7723,183 @@ var render = function() {
           )
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { width: "499" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-card-title",
+                {
+                  staticClass: "headline grey lighten-2",
+                  attrs: { "primary-title": "" }
+                },
+                [_vm._v("\n      Edit Konstruktor\n    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-layout",
+                    [
+                      _c(
+                        "v-flex",
+                        { attrs: { xs12: "" } },
+                        [
+                          _c(
+                            "v-card",
+                            [
+                              _c(
+                                "v-card-text",
+                                { attrs: { "primary-title": "" } },
+                                [
+                                  _c("span", [
+                                    _vm._v(
+                                      "Peserta magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.users.name
+                                            : ""
+                                        )
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Tgl Mulai magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.from.toLocaleString()
+                                            : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Tgl Selesai magang: " +
+                                        _vm._s(
+                                          _vm.magang
+                                            ? _vm.magang.until.toLocaleString()
+                                            : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ]),
+                                  _c("br"),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Asal: " +
+                                        _vm._s(
+                                          _vm.magang ? _vm.magang.asal : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-form",
+                            {
+                              ref: "form",
+                              attrs: { "lazy-validation": "" },
+                              model: {
+                                value: _vm.valid,
+                                callback: function($$v) {
+                                  _vm.valid = $$v
+                                },
+                                expression: "valid"
+                              }
+                            },
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  rules: _vm.rules,
+                                  items: _vm.dataKonstruktor,
+                                  "item-value": "id",
+                                  "item-text": "name",
+                                  label: "Konstruktor",
+                                  "return-object": ""
+                                },
+                                model: {
+                                  value: _vm.konstruktor,
+                                  callback: function($$v) {
+                                    _vm.konstruktor = $$v
+                                  },
+                                  expression: "konstruktor"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "primary" },
+                      on: { click: _vm.submitKonstruktor }
+                    },
+                    [_vm._v("\n       Simpan\n      ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { flat: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.dialog = false
+                        }
+                      }
+                    },
+                    [_vm._v("\n       Close\n      ")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
       )
     ],
     1
@@ -7598,27 +7953,78 @@ var render = function() {
                                 "v-card-title",
                                 { attrs: { "primary-title": "" } },
                                 [
-                                  _c("div", [
-                                    _c("div", { staticClass: "headline" }, [
-                                      _vm._v("Magang Sudah Selesai")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("span", [
-                                      _vm._v(
-                                        "Mulai Magang: " +
-                                          _vm._s(_vm.dataMagang.from)
+                                  _c(
+                                    "div",
+                                    [
+                                      _c("div", { staticClass: "headline" }, [
+                                        _vm._v("Magang Sudah Selesai")
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(
+                                          "Mulai Magang: " +
+                                            _vm._s(_vm.dataMagang.from)
+                                        )
+                                      ]),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(
+                                          "Selesai Magang: " +
+                                            _vm._s(_vm.dataMagang.until)
+                                        )
+                                      ]),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(
+                                          "Asal: " + _vm._s(_vm.dataMagang.asal)
+                                        )
+                                      ]),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(
+                                          "Pembimbing Asal: " +
+                                            _vm._s(
+                                              _vm.dataMagang.pembimbing_asal
+                                                ? _vm.dataMagang.pembimbing_asal
+                                                    .name
+                                                : "-"
+                                            )
+                                        )
+                                      ]),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c("span", [
+                                        _vm._v(
+                                          "Konstruktor: " +
+                                            _vm._s(
+                                              _vm.dataMagang.konstruktor
+                                                ? _vm.dataMagang.konstruktor
+                                                    .user.name
+                                                : "-"
+                                            )
+                                        )
+                                      ]),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.downloadPdfNilai(
+                                                _vm.magang.id
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Lihat Nilai")]
                                       )
-                                    ]),
-                                    _c("br"),
-                                    _vm._v(" "),
-                                    _c("span", [
-                                      _vm._v(
-                                        "Selesai Magang: " +
-                                          _vm._s(_vm.dataMagang.until)
-                                      )
-                                    ]),
-                                    _c("br")
-                                  ])
+                                    ],
+                                    1
+                                  )
                                 ]
                               ),
                               _vm._v(" "),
@@ -7662,6 +8068,39 @@ var render = function() {
                                       _vm._v(
                                         "Selesai Magang: " +
                                           _vm._s(_vm.dataMagang.until)
+                                      )
+                                    ]),
+                                    _c("br"),
+                                    _vm._v(" "),
+                                    _c("span", [
+                                      _vm._v(
+                                        "Asal: " + _vm._s(_vm.dataMagang.asal)
+                                      )
+                                    ]),
+                                    _c("br"),
+                                    _vm._v(" "),
+                                    _c("span", [
+                                      _vm._v(
+                                        "Pembimbing Asal: " +
+                                          _vm._s(
+                                            _vm.dataMagang.pembimbing_asal
+                                              ? _vm.dataMagang.pembimbing_asal
+                                                  .name
+                                              : "-"
+                                          )
+                                      )
+                                    ]),
+                                    _c("br"),
+                                    _vm._v(" "),
+                                    _c("span", [
+                                      _vm._v(
+                                        "Konstruktor: " +
+                                          _vm._s(
+                                            _vm.dataMagang.konstruktor
+                                              ? _vm.dataMagang.konstruktor.user
+                                                  .name
+                                              : "-"
+                                          )
                                       )
                                     ]),
                                     _c("br")
@@ -7953,38 +8392,6 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(" "),
-                                      _c("input", {
-                                        attrs: {
-                                          type: "hidden",
-                                          name: "user_id"
-                                        },
-                                        domProps: {
-                                          value: _vm.pembimbing.konstruktor
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("v-select", {
-                                        attrs: {
-                                          rules: [_vm.rules.required],
-                                          items: _vm.dataKonstruktor,
-                                          label: "Pembimbing Lapangan",
-                                          "item-text": "name",
-                                          "item-value": "id",
-                                          "append-icon": "person"
-                                        },
-                                        model: {
-                                          value: _vm.pembimbing.konstruktor,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.pembimbing,
-                                              "konstruktor",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "pembimbing.konstruktor"
-                                        }
-                                      }),
-                                      _vm._v(" "),
                                       _c(
                                         "v-btn",
                                         {
@@ -7992,9 +8399,7 @@ var render = function() {
                                             disabled: !_vm.valid3,
                                             color: "success"
                                           },
-                                          on: {
-                                            click: _vm.submitAddKonstruktor
-                                          }
+                                          on: { click: _vm.submitPembimbing }
                                         },
                                         [
                                           _vm._v(
@@ -8022,7 +8427,7 @@ var render = function() {
                             "v-card",
                             {
                               staticClass: "white--text",
-                              attrs: { color: "blue darken-2" }
+                              attrs: { color: "orange darken-2" }
                             },
                             [
                               _c(
@@ -9007,26 +9412,21 @@ var render = function() {
                                   [_vm._v(_vm._s(props.item.asal))]
                                 ),
                                 _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.setSubItem(props.index)
-                                        props.expanded = !props.expanded
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      _vm._s(
-                                        props.item.konstruktor
-                                          ? props.item.konstruktor.user.name
-                                          : ""
-                                      )
+                                _c("td", {
+                                  domProps: {
+                                    innerHTML: _vm._s(
+                                      props.item.konstruktor
+                                        ? props.item.konstruktor.user.name
+                                        : "<span class='red--text'><i>--belum ada</i></span>"
                                     )
-                                  ]
-                                ),
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
+                                    }
+                                  }
+                                }),
                                 _vm._v(" "),
                                 _c(
                                   "td",
@@ -9182,6 +9582,7 @@ var render = function() {
                                   [
                                     _c(
                                       "v-btn-toggle",
+                                      { attrs: { mandatory: "" } },
                                       [
                                         _c(
                                           "v-btn",

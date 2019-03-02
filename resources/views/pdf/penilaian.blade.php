@@ -127,7 +127,7 @@ Nama : {{$magang->users->name}}<br>
 Semarang, {{date('d').' '.month(date('m')).' '.date('Y')}}<br>
 <div class="a">Koordinator Pembimbing,</div><br><br><br><br>
 
-{{$magang->konstruktor->user->name}}
+{{$magang->konstruktor ? $magang->konstruktor->user->name:'-'}}
 </div>
 </body>
 

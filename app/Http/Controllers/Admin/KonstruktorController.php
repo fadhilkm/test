@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Magang;
-use App\Surat;
-
-class MagangController extends Controller
+use App\Konstruktor;
+class KonstruktorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +14,7 @@ class MagangController extends Controller
      */
     public function index()
     {
-        $data['magang'] = Magang::with(['users','konstruktor.user','surats.jenis_surat'])->get();
-        $data['konstruktor'] =  \App\User::whereHas('roles', function($query){
-            $query->where('name','konstruktor');
-        })->get();
-
-        return view('pages.admin.magang', $data);
+        //
     }
 
     /**
@@ -89,37 +82,13 @@ class MagangController extends Controller
     {
         //
     }
-    public function load(){
-       return Magang::with(['users','konstruktor.user','surats.jenis_surat'])->get();
+    public function addtomagang(Request $request){
+    
+        $magang = $request->input('magang');
+        $user = $request->input('user');
+        $konstruktor = Konstruktor::firstOrNew(['magang_id'=>$magang['id']]);
+        $konstruktor->user_id = $user['id'];
+        $konstruktor->save();
+        return $konstruktor;
     }
-    public function validasi(Request $request){
-        $data = $request->input('data');
-        $validate = $request->input('validate');
-        foreach($data as $magang){
-            $magang_ = Magang::findOrFail($magang['id']);
-            $magang_->is_validate = $validate;
-            $magang_->save();
-        }
-        return ['sukses'=>'success'];
-    }
-    public function completed(Request $request){
-        $data = $request->input('data');
-        $completed = $request->input('completed');
-        foreach($data as $magang){
-            $magang_ = Magang::findOrFail($magang['id']);
-            $magang_->is_completed = $completed;
-            $magang_->save();
-        }
-        return ['sukses'=>'success'];
-    }
-    public function delete(Request $request){
-        $data = $request->input();
-        
-        foreach($data as $magang){
-            $magang_ = Magang::findOrFail($magang['id']);
-            $magang_->delete();
-        }
-        return ['sukses'=>'success'];
-    }
-
 }

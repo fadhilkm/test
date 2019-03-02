@@ -9019,7 +9019,11 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      _vm._s(props.item.konstruktor.user.name)
+                                      _vm._s(
+                                        props.item.konstruktor
+                                          ? props.item.konstruktor.user.name
+                                          : ""
+                                      )
                                     )
                                   ]
                                 ),

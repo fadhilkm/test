@@ -26,7 +26,7 @@
                   </td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.users.name }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.asal }}</td>
-                  <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.konstruktor.user.name }}</td>
+                  <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.konstruktor ? props.item.konstruktor.user.name:'' }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.from.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded">{{ props.item.until.toLocaleString() }}</td>
                   <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-if="props.item.status.code==-1">

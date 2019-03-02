@@ -14,8 +14,13 @@
                   <span>Pembimbing Asal: {{dataMagang.pembimbing_asal ? dataMagang.pembimbing_asal.name:'-'}}</span><br>
 
                   <span>Konstruktor: {{dataMagang.konstruktor ? dataMagang.konstruktor.user.name:'-'}}</span><br>
+                  <div v-if="dataMagang.nilai_is_validate">
                   <v-btn @click="downloadPdfNilai(magang.id)">Lihat Nilai</v-btn>
-                    <!--  <v-btn >Lihat Surat Permohonan</v-btn>  -->
+                </div>
+                  <div v-else>
+                    <v-btn>Nilai Belum Keluar, Silahkan Tunggu</v-btn>
+                  </div>
+                   <v-btn @click="downloadSertifikat(magang.id)">Lihat Sertifikat</v-btn>
                 </div>
               </v-card-title>
               <v-card-actions>
@@ -398,6 +403,9 @@
           },
           downloadPdfNilai:function(magang_id){
               window.open("/penilaian/downloadPdf/"+magang_id, "_blank");
+          },
+          downloadSertifikat:function(magang_id){
+              window.open('/magang/downloadSertifikat/'+magang_id, '_blank');
           },
           submitBiodata:function(){
              if(this.$refs.form1.validate()){

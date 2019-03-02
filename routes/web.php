@@ -55,7 +55,9 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 });
 
 
-Route::get('/penilaian/downloadPdf/{magang_id}', 'PenilaianController@downloadPdf');
+Route::get('/penilaian/downloadPdf/{magang_id}', 'PenilaianController@downloadPdf')->middleware(['auth','user']);;
+Route::get('/magang/downloadSertifikat/{magang_id}', 'MagangController@downloadSertifikat')->middleware(['auth','user']);;
+
 Route::resource('/magang','MagangController')->middleware(['auth','user']);
 Route::post('/magang/addkonstruktor','MagangController@addkonstruktor')->middleware(['auth','user']);
 Route::resource('/biodata','BiodataController')->middleware(['auth','user']);

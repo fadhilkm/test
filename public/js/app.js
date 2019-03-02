@@ -2544,6 +2544,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['dataMagang', 'dataBiodata', 'dataKonstruktor'],
   data: function data() {
@@ -2666,6 +2671,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     },
     downloadPdfNilai: function downloadPdfNilai(magang_id) {
       window.open("/penilaian/downloadPdf/" + magang_id, "_blank");
+    },
+    downloadSertifikat: function downloadSertifikat(magang_id) {
+      window.open('/magang/downloadSertifikat/' + magang_id, '_blank');
     },
     submitBiodata: function submitBiodata() {
       var _this3 = this;
@@ -8009,18 +8017,50 @@ var render = function() {
                                       ]),
                                       _c("br"),
                                       _vm._v(" "),
+                                      _vm.dataMagang.nilai_is_validate
+                                        ? _c(
+                                            "div",
+                                            [
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.downloadPdfNilai(
+                                                        _vm.magang.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Lihat Nilai")]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        : _c(
+                                            "div",
+                                            [
+                                              _c("v-btn", [
+                                                _vm._v(
+                                                  "Nilai Belum Keluar, Silahkan Tunggu"
+                                                )
+                                              ])
+                                            ],
+                                            1
+                                          ),
+                                      _vm._v(" "),
                                       _c(
                                         "v-btn",
                                         {
                                           on: {
                                             click: function($event) {
-                                              return _vm.downloadPdfNilai(
+                                              return _vm.downloadSertifikat(
                                                 _vm.magang.id
                                               )
                                             }
                                           }
                                         },
-                                        [_vm._v("Lihat Nilai")]
+                                        [_vm._v("Lihat Sertifikat")]
                                       )
                                     ],
                                     1

@@ -108,6 +108,11 @@ class PenilaianController extends Controller
        return preg_replace('/[^A-Za-z0-9 ]/', '', $string); // Removes special chars.
     }
     public function downloadPdf($magang_id){
+        $magang = \App\Magang::whereHas('users',function($query){
+            $query->where('user_id',auth()->user()->id);
+        })->findOrFail($magang_id);
+        if(!$magang->nilai_is_validate)abort(404);
+        
         $data = $this->getNilai($magang_id);
         $pdf = \PDF::loadView('pdf.penilaian',$data);
         return $pdf->stream(Carbon::now('Asia/Jakarta')->format('Y-m-d').' - '.$this->clean($data['magang']->users->name).' - '.$data['magang']->asal);

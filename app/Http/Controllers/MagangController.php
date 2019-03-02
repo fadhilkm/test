@@ -9,6 +9,8 @@ use App\Surat;
 use App\Biodata;
 use App\User;
 use App\Konstruktor;
+
+use Barryvdh\DomPDF\Facade;
 class MagangController extends Controller
 {
     /**
@@ -156,7 +158,9 @@ class MagangController extends Controller
 
     }
     public function test(){
-        $asu = \App\AspekNilai::with('sub_aspek_nilai')->get();
-        return $asu;
+         $data['magang'] = Magang::with(['users'])->first();
+        return view('pdf.penilaian',$data);
+       $pdf = \PDF::loadView('pdf.penilaian');
+        return $pdf->stream('invoice.pdf');
     }
 }

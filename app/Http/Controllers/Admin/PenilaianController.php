@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class PenilaianController extends Controller
 {
@@ -43,7 +44,7 @@ class PenilaianController extends Controller
         $aspeks = $request->input('penilaian');
        
         $request->validate([
-            'penilaian.*.sub_aspek_nilai.*.nilai'=> 'required|integer|lte:100'
+            'penilaian.*.sub_aspek_nilai.*.nilai'=> 'required|numeric|lte:100'
         ]);
         foreach($aspeks as $aspek){
             foreach($aspek['sub_aspek_nilai'] as $sub_aspek_nilai){
@@ -119,8 +120,36 @@ class PenilaianController extends Controller
             foreach($aspek_->sub_aspek_nilai as $subaspek_){
                 $penilaian = $subaspek_->penilaian()->where('magang_id',$magang_id)->first();
                 $subaspek_->nilai = $penilaian!=null ? $penilaian->nilai:0;
+                $subaspek_->nilai_huruf = $this->konversiNilai($subaspek_->nilai);
             }
         }
-        return ['magang'=>\App\Magang::with('users')->findOrFail($magang_id), 'penilaian'=>$aspek];
+        return ['magang'=>\App\Magang::with('konstruktor.user','users')->findOrFail($magang_id), 'penilaian'=>$aspek];
     }
+    public function konversiNilai($nilai){
+        if($nilai>85)return 'A';
+        else if($nilai>80)return 'AB';
+        else if($nilai>70)return 'B';
+        else if($nilai>65)return 'BC';
+        else if($nilai>60)return 'C';
+        else if($nilai>55)return 'CD';
+        else if($nilai>50)return 'D';
+        else return 'E';
+    }
+    public function clean($string) {
+        //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+       return preg_replace('/[^A-Za-z0-9 ]/', '', $string); // Removes special chars.
+    }
+    public function downloadPdf($magang_id){
+        $data = $this->getNilai($magang_id);
+        $pdf = \PDF::loadView('pdf.penilaian',$data);
+        return $pdf->stream(Carbon::now('Asia/Jakarta')->format('Y-m-d').' - '.$this->clean($data['magang']->users->name).' - '.$data['magang']->asal);
+    }
+    public function test(){
+       
+        //return view('pdf.penilaian',$this->getNilai(1));
+        $data = $this->getNilai(1);
+        $pdf = \PDF::loadView('pdf.penilaian',$data);
+        return $pdf->stream(Carbon::now('Asia/Jakarta')->format('Y-m-d').' - '.$this->clean($data['magang']->users->name).' - '.$data['magang']->asal);
+    }
+
 }

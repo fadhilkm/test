@@ -45,10 +45,18 @@
                 <td @click="setSubItem(props.index);props.expanded = !props.expanded" v-else>
                     <span class="green--text">Sudah divalidasi</span>
                 </td>
-                <td><v-btn color="primary"
+                <td><!-- <v-btn color="primary"
                     dark
                     @click.stop="getNilaiPesertaMagang(props.item)"
-                    small>Penilaian</v-btn>
+                    small>Penilaian</v-btn> -->
+                   <v-btn-toggle>
+                    <v-btn @click.stop="getNilaiPesertaMagang(props.item)">
+                      Penilaian
+                    </v-btn>
+                    <v-btn @click="downloadPdfNilai(props.item)">
+                      Download Nilai
+                    </v-btn>
+                  </v-btn-toggle>
                   </td>
               </tr>
                 </template>
@@ -56,7 +64,7 @@
                 <template slot="expand" slot-scope="props">
                 <v-card flat>
                   <v-card-text>
-                      <v-form target="_blank" v-for="surat in magang.surats" :key="surat.id" method="POST" action="/konstruktor/viewpdf">
+                      <v-form target="_blank" v-for="surat in magang.surats" :key="surat.id" method="POST" action="/admin/viewpdf">
                         <input type="hidden" name="_token" :value="csrf">
                         <input type="hidden" name="filename" :value="surat.path_upload">
                         <v-btn type="submit" color="info">{{surat.jenis_surat.name}}</v-btn>
@@ -292,6 +300,9 @@
               }
             });
           },
+          downloadPdfNilai:function(magang){
+              window.open("/admin/penilaian/downloadPdf/"+magang.id, "_blank");
+          },
           submitNilai:function(){
             let data={'magang':this.magang,'penilaian':this.penilaian};
               Swal.fire({
@@ -323,6 +334,7 @@
                        'Berhasil simpan nilai',
                        'success'
                     );
+                    this.dialog=false;
                     //this.loadMagang();
                  }
               });  

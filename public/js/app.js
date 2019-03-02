@@ -2754,6 +2754,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['dataMagang', 'dataFieldPenilaian'],
   data: function data() {
@@ -2879,7 +2886,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    downloadPdfNilai: function downloadPdfNilai(magang) {
+      window.open("/konstruktor/penilaian/downloadPdf/" + magang.id, "_blank");
+    },
     submitNilai: function submitNilai() {
+      var _this3 = this;
+
       var data = {
         'magang': this.magang,
         'penilaian': this.penilaian
@@ -2907,7 +2919,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (result) {
         if (result.value) {
-          Swal.fire('Good job!', 'Berhasil simpan nilai', 'success'); //this.loadMagang();
+          Swal.fire('Good job!', 'Berhasil simpan nilai', 'success');
+          _this3.dialog = false; //this.loadMagang();
         }
       });
     },
@@ -2917,16 +2930,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadMagang: function loadMagang() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/admin/magang/load').then(function (res) {
-        _this3.items = res.data;
+        _this4.items = res.data;
 
-        _this3.addItemsMagangStatus();
+        _this4.addItemsMagangStatus();
       });
     },
     submitValidasi: function submitValidasi(validate) {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(this.selected); //return;
 
@@ -2959,12 +2972,12 @@ __webpack_require__.r(__webpack_exports__);
         if (result.value) {
           Swal.fire('Good job!', 'Berhasil edit data magang', 'success');
 
-          _this4.loadMagang();
+          _this5.loadMagang();
         }
       });
     },
     submitCompleted: function submitCompleted(completed) {
-      var _this5 = this;
+      var _this6 = this;
 
       console.log(this.selected); //return;
 
@@ -2997,7 +3010,7 @@ __webpack_require__.r(__webpack_exports__);
         if (result.value) {
           Swal.fire('Good job!', 'Berhasil edit data magang', 'success');
 
-          _this5.loadMagang();
+          _this6.loadMagang();
         }
       });
     },
@@ -3018,6 +3031,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3318,7 +3339,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    downloadPdfNilai: function downloadPdfNilai(magang) {
+      window.open("/admin/penilaian/downloadPdf/" + magang.id, "_blank");
+    },
     submitNilai: function submitNilai() {
+      var _this3 = this;
+
       var data = {
         'magang': this.magang,
         'penilaian': this.penilaian
@@ -3346,7 +3372,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (result) {
         if (result.value) {
-          Swal.fire('Good job!', 'Berhasil simpan nilai', 'success'); //this.loadMagang();
+          Swal.fire('Good job!', 'Berhasil simpan nilai', 'success');
+          _this3.dialog = false; //this.loadMagang();
         }
       });
     },
@@ -3356,16 +3383,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadMagang: function loadMagang() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/admin/penilaian/load').then(function (res) {
-        _this3.items = res.data;
+        _this4.items = res.data;
 
-        _this3.addItemsMagangStatus();
+        _this4.addItemsMagangStatus();
       });
     },
     submitValidasi: function submitValidasi(validate) {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(this.selected); //return;
 
@@ -3398,7 +3425,7 @@ __webpack_require__.r(__webpack_exports__);
         if (result.value) {
           Swal.fire('Good job!', 'Berhasil validasi nilai', 'success');
 
-          _this4.loadMagang();
+          _this5.loadMagang();
         }
       });
     },
@@ -8318,417 +8345,331 @@ var render = function() {
                 "v-flex",
                 { attrs: { xs12: "" } },
                 [
-                  _c(
-                    "v-data-table",
-                    {
-                      staticClass: "elevation-1",
-                      attrs: {
-                        headers: _vm.headers,
-                        items: _vm.items,
-                        "item-key": "id",
-                        "select-all": "",
-                        expand: _vm.expand
-                      },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "items",
-                          fn: function(props) {
-                            return [
-                              _c("tr", [
-                                _c(
-                                  "td",
-                                  [
-                                    _c("v-checkbox", {
-                                      attrs: {
-                                        primary: "",
-                                        "hide-details": ""
+                  _c("v-data-table", {
+                    staticClass: "elevation-1",
+                    attrs: {
+                      headers: _vm.headers,
+                      items: _vm.items,
+                      "item-key": "id",
+                      "select-all": "",
+                      expand: _vm.expand
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "items",
+                        fn: function(props) {
+                          return [
+                            _c("tr", [
+                              _c(
+                                "td",
+                                [
+                                  _c("v-checkbox", {
+                                    attrs: { primary: "", "hide-details": "" },
+                                    model: {
+                                      value: props.selected,
+                                      callback: function($$v) {
+                                        _vm.$set(props, "selected", $$v)
                                       },
-                                      model: {
-                                        value: props.selected,
-                                        callback: function($$v) {
-                                          _vm.$set(props, "selected", $$v)
-                                        },
-                                        expression: "props.selected"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.setSubItem(props.index)
-                                        props.expanded = !props.expanded
-                                      }
+                                      expression: "props.selected"
                                     }
-                                  },
-                                  [_vm._v(_vm._s(props.item.users.name))]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.setSubItem(props.index)
-                                        props.expanded = !props.expanded
-                                      }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
                                     }
-                                  },
-                                  [_vm._v(_vm._s(props.item.asal))]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.setSubItem(props.index)
-                                        props.expanded = !props.expanded
-                                      }
+                                  }
+                                },
+                                [_vm._v(_vm._s(props.item.users.name))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
                                     }
-                                  },
-                                  [
-                                    _vm._v(
-                                      _vm._s(props.item.from.toLocaleString())
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.setSubItem(props.index)
-                                        props.expanded = !props.expanded
-                                      }
+                                  }
+                                },
+                                [_vm._v(_vm._s(props.item.asal))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
                                     }
-                                  },
-                                  [
-                                    _vm._v(
-                                      _vm._s(props.item.until.toLocaleString())
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                props.item.status.code == -1
-                                  ? _c(
-                                      "td",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setSubItem(props.index)
-                                            props.expanded = !props.expanded
-                                          }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(props.item.from.toLocaleString())
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.setSubItem(props.index)
+                                      props.expanded = !props.expanded
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(props.item.until.toLocaleString())
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              props.item.status.code == -1
+                                ? _c(
+                                    "td",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.setSubItem(props.index)
+                                          props.expanded = !props.expanded
                                         }
-                                      },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "red--text" },
-                                          [
-                                            _vm._v(
+                                      }
+                                    },
+                                    [
+                                      _c("span", { staticClass: "red--text" }, [
+                                        _vm._v(
+                                          _vm._s(props.item.status.description)
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                : props.item.status.code == 0
+                                ? _c(
+                                    "td",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.setSubItem(props.index)
+                                          props.expanded = !props.expanded
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "blue--text" },
+                                        [
+                                          _vm._v(
+                                            " " +
                                               _vm._s(
                                                 props.item.status.description
                                               )
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  : props.item.status.code == 0
-                                  ? _c(
-                                      "td",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setSubItem(props.index)
-                                            props.expanded = !props.expanded
-                                          }
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                : _c(
+                                    "td",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.setSubItem(props.index)
+                                          props.expanded = !props.expanded
                                         }
-                                      },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "blue--text" },
-                                          [
-                                            _vm._v(
-                                              " " +
-                                                _vm._s(
-                                                  props.item.status.description
-                                                )
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  : _c(
-                                      "td",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setSubItem(props.index)
-                                            props.expanded = !props.expanded
-                                          }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "green--text" },
+                                        [
+                                          _vm._v(
+                                            " " +
+                                              _vm._s(
+                                                props.item.status.description
+                                              )
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              !props.item.nilai_is_validate
+                                ? _c(
+                                    "td",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.setSubItem(props.index)
+                                          props.expanded = !props.expanded
                                         }
-                                      },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "green--text" },
-                                          [
-                                            _vm._v(
-                                              " " +
-                                                _vm._s(
-                                                  props.item.status.description
-                                                )
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    ),
-                                _vm._v(" "),
-                                !props.item.nilai_is_validate
-                                  ? _c(
-                                      "td",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setSubItem(props.index)
-                                            props.expanded = !props.expanded
-                                          }
+                                      }
+                                    },
+                                    [
+                                      _c("span", { staticClass: "red--text" }, [
+                                        _vm._v("Belum divalidasi")
+                                      ])
+                                    ]
+                                  )
+                                : _c(
+                                    "td",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.setSubItem(props.index)
+                                          props.expanded = !props.expanded
                                         }
-                                      },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "red--text" },
-                                          [_vm._v("Belum divalidasi")]
-                                        )
-                                      ]
-                                    )
-                                  : _c(
-                                      "td",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.setSubItem(props.index)
-                                            props.expanded = !props.expanded
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "span",
-                                          { staticClass: "green--text" },
-                                          [_vm._v("Sudah divalidasi")]
-                                        )
-                                      ]
-                                    ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  [
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "primary",
-                                          dark: "",
-                                          small: ""
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            $event.stopPropagation()
-                                            return _vm.getNilaiPesertaMagang(
-                                              props.item
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Penilaian")]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ])
-                            ]
-                          }
-                        },
-                        {
-                          key: "expand",
-                          fn: function(props) {
-                            return [
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "green--text" },
+                                        [_vm._v("Sudah divalidasi")]
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
                               _c(
-                                "v-card",
-                                { attrs: { flat: "" } },
+                                "td",
                                 [
                                   _c(
-                                    "v-card-text",
-                                    _vm._l(_vm.magang.surats, function(surat) {
-                                      return _c(
-                                        "v-form",
+                                    "v-btn-toggle",
+                                    { attrs: { mandatory: "" } },
+                                    [
+                                      _c(
+                                        "v-btn",
                                         {
-                                          key: surat.id,
-                                          attrs: {
-                                            target: "_blank",
-                                            method: "POST",
-                                            action: "/konstruktor/viewpdf"
+                                          on: {
+                                            click: function($event) {
+                                              $event.stopPropagation()
+                                              return _vm.getNilaiPesertaMagang(
+                                                props.item
+                                              )
+                                            }
                                           }
                                         },
                                         [
-                                          _c("input", {
-                                            attrs: {
-                                              type: "hidden",
-                                              name: "_token"
-                                            },
-                                            domProps: { value: _vm.csrf }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("input", {
-                                            attrs: {
-                                              type: "hidden",
-                                              name: "filename"
-                                            },
-                                            domProps: {
-                                              value: surat.path_upload
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: {
-                                                type: "submit",
-                                                color: "info"
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(surat.jenis_surat.name)
-                                              )
-                                            ]
+                                          _vm._v(
+                                            "\n                  Penilaian\n                "
                                           )
-                                        ],
-                                        1
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.downloadPdfNilai(
+                                                props.item
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                  Download Nilai\n                "
+                                          )
+                                        ]
                                       )
-                                    }),
+                                    ],
                                     1
                                   )
                                 ],
                                 1
                               )
-                            ]
-                          }
+                            ])
+                          ]
                         }
-                      ]),
-                      model: {
-                        value: _vm.selected,
-                        callback: function($$v) {
-                          _vm.selected = $$v
-                        },
-                        expression: "selected"
-                      }
-                    },
-                    [
-                      _vm._v(" "),
-                      _vm._v(" "),
-                      _c("template", { slot: "footer" }, [
-                        _c(
-                          "td",
-                          { attrs: { colspan: _vm.headers.length + 1 } },
-                          [
+                      },
+                      {
+                        key: "expand",
+                        fn: function(props) {
+                          return [
                             _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "info",
-                                  disabled:
-                                    _vm.selected.length > 0 ? false : true
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.submitValidasi(true)
-                                  }
-                                }
-                              },
-                              [_vm._v("Validasi")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "error",
-                                  disabled:
-                                    _vm.selected.length > 0 ? false : true
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.submitValidasi(false)
-                                  }
-                                }
-                              },
-                              [_vm._v("Belum Validasi")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "success",
-                                  disabled:
-                                    _vm.selected.length > 0 ? false : true
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.submitCompleted(true)
-                                  }
-                                }
-                              },
-                              [_vm._v("Selesai")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "error",
-                                  disabled:
-                                    _vm.selected.length > 0 ? false : true
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.submitCompleted(false)
-                                  }
-                                }
-                              },
-                              [_vm._v("Belum Selesai")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "warning",
-                                  disabled:
-                                    _vm.selected.length > 0 ? false : true
-                                },
-                                on: { click: _vm.hapus }
-                              },
-                              [_vm._v("Hapus")]
+                              "v-card",
+                              { attrs: { flat: "" } },
+                              [
+                                _c(
+                                  "v-card-text",
+                                  _vm._l(_vm.magang.surats, function(surat) {
+                                    return _c(
+                                      "v-form",
+                                      {
+                                        key: surat.id,
+                                        attrs: {
+                                          target: "_blank",
+                                          method: "POST",
+                                          action: "/konstruktor/viewpdf"
+                                        }
+                                      },
+                                      [
+                                        _c("input", {
+                                          attrs: {
+                                            type: "hidden",
+                                            name: "_token"
+                                          },
+                                          domProps: { value: _vm.csrf }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          attrs: {
+                                            type: "hidden",
+                                            name: "filename"
+                                          },
+                                          domProps: { value: surat.path_upload }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              type: "submit",
+                                              color: "info"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(surat.jenis_surat.name)
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  }),
+                                  1
+                                )
+                              ],
+                              1
                             )
-                          ],
-                          1
-                        )
-                      ])
-                    ],
-                    2
-                  )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.selected,
+                      callback: function($$v) {
+                        _vm.selected = $$v
+                      },
+                      expression: "selected"
+                    }
+                  })
                 ],
                 1
               )
@@ -9236,23 +9177,46 @@ var render = function() {
                                   "td",
                                   [
                                     _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "primary",
-                                          dark: "",
-                                          small: ""
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            $event.stopPropagation()
-                                            return _vm.getNilaiPesertaMagang(
-                                              props.item
+                                      "v-btn-toggle",
+                                      [
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                $event.stopPropagation()
+                                                return _vm.getNilaiPesertaMagang(
+                                                  props.item
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                  Penilaian\n                "
                                             )
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Penilaian")]
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.downloadPdfNilai(
+                                                  props.item
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                  Download Nilai\n                "
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
                                     )
                                   ],
                                   1
@@ -9279,7 +9243,7 @@ var render = function() {
                                           attrs: {
                                             target: "_blank",
                                             method: "POST",
-                                            action: "/konstruktor/viewpdf"
+                                            action: "/admin/viewpdf"
                                           }
                                         },
                                         [

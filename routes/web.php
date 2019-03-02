@@ -34,10 +34,12 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->prefix('admin')->group
 		Route::post('/viewpdf', 'SuratController@viewpdf');
 		Route::get('/getnilai/{magang_id}', 'PenilaianController@getnilai');
 
+		Route::get('/penilaian/downloadPdf/{magang_id}', 'PenilaianController@downloadPdf');
 		Route::get('/penilaian/load', 'PenilaianController@load');
 		Route::resource('/penilaian', 'PenilaianController');
 		
 		Route::post('/penilaian/validasi', 'PenilaianController@validasi');
+
 
 });
 Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('konstruktor')->group(function(){
@@ -45,8 +47,9 @@ Route::middleware(['auth', 'konstruktor'])->namespace('Konstruktor')->prefix('ko
 		Route::get('/magang', 'MagangController@index');
 		Route::post('/viewpdf', 'SuratController@viewpdf');
 		Route::get('/getnilai/{magang_id}', 'PenilaianController@getnilai');
-		Route::resource('/penilaian', 'PenilaianController');
 
+		Route::get('/penilaian/downloadPdf/{magang_id}', 'PenilaianController@downloadPdf');
+		Route::resource('/penilaian', 'PenilaianController');
 
 });
 
@@ -67,4 +70,4 @@ Route::get('/logout', function(){
 
 });
 
-Route::get('/test', "MagangController@test");
+Route::get('/test', "Admin\PenilaianController@test");

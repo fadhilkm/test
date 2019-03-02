@@ -83,11 +83,12 @@ class SuratController extends Controller
     {
         //
     }
-    public function viewpdf(Request $request){
+   public function viewpdf(Request $request){
         $request->validate([
             'filename' => 'required'
         ]);
-        $path = storage_path('/app/'.$request->input('filename'));
+        $path = storage_path('app/'.$request->input('filename'));
+        if(!file_exists($path))$path = storage_path($request->input('filename'));
         return response()->file($path);
     }
 }
